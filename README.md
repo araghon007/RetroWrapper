@@ -4,6 +4,8 @@ This is a fork of RetroWrapper, which the original author seems to have abandone
 
 Head to the releases tab to grab the newest version. 
 
+Legacy readme preserved below.
+
 # RetroWrapper
 Enables you to play _fixed_ old versions of minecraft without ever touching .jar files, works even when offline!
 
