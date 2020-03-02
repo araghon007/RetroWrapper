@@ -1,3 +1,9 @@
+# RetroWrapper - NeRd fork
+
+This is a fork of RetroWrapper, which the original author seems to have abandoned. RetroWrapper works as a proxy between the lack of old mojang servers and your older versions of minecraft, by emulating these servers. I'm going to sit down and get to grips with it at some point, but for now I might mainly focus on smaller and easier to understand issues. No promises.
+
+Head to the releases tab to grab the newest version. 
+
 # RetroWrapper
 Enables you to play _fixed_ old versions of minecraft without ever touching .jar files, works even when offline!
 
