@@ -18,6 +18,8 @@ Todo:
 - Fix some other bugs / implement feature requests under "issues" if possible (note: I'm bad at Java though)
 - Verify that importing the whole project into Netbeans in a janky way hasn't broken anything. Also, that the compiler settings haven't broken anything.
 
+Note: I'm not the original author, but I'm assuming that they're not going to update this project anymore, so I'll use the current version scheme with the added -nerd tag (-ex-nerd for experimental releases / releases that haven't been verified / tested that much). Also, as there are no comments and I'm bad at Java, please tell me if any bugs arise due to my careless mistreatment of the codebase!
+
 # Legacy Readme: RetroWrapper
 Enables you to play _fixed_ old versions of minecraft without ever touching .jar files, works even when offline!
 
