@@ -4,9 +4,18 @@ This is a fork of RetroWrapper, which the original author seems to have abandone
 
 Head to the releases tab to grab the newest version. 
 
-Legacy readme preserved below.
 
-# RetroWrapper
+Todo:
+
+- ~~Fix Max installer support~~ Fixed in 1.4.1 (note: confirm RetroWrapper actually works under Mac at all.)
+- Add support for installing mutiple versions at once
+- Change the way the uninstal button works (currently deletes ALL instances of RetroWrapper + library files, effectively reomving itself completely). 
+  - Show already wrapped versions. 
+  - Make a new button with current functionality called "uninstal everything" (text a wip), and use current button to uninstal only one instance. (Note: swing sucks, espacially if you don't know how to use swing.)
+- Fix some bugs under "issues" if possible (note: I'm bad at Java though)
+- Verify that importing the whole project into Netbeans in a janky way hasn't broken anything. Also, that the compiler settings haven't broken anything.
+
+# Legacy Readme: RetroWrapper
 Enables you to play _fixed_ old versions of minecraft without ever touching .jar files, works even when offline!
 
 Needs Java 7 or higher!!
