@@ -2,12 +2,12 @@
 
 This is a fork of RetroWrapper, which the original author seems to have abandoned. RetroWrapper works as a proxy between the lack of old mojang servers and your older versions of minecraft, by emulating these servers. I'm going to sit down and get to grips with it at some point, but for now I might mainly focus on smaller and easier to understand issues. Main changes will be just in the installer for now, as I don't want to break anything important and can't think of anything better to implement.
 
-Head to the releases tab to grab the newest version. 
+Head to the releases tab to grab the newest version. The version scheme is the same, but any releases by me are marked by the added -nerd tag (-ex-nerd for experimental releases / releases that haven't been verified / tested that much).
 
 
 Todo:
 
-- ~~Fix Max installer support~~ Fixed in 1.4.1 (note: confirm RetroWrapper actually works under Mac at all.)
+- ~~Fix Max installer support~~ Fixed in ex-1.4.1 (note: confirm RetroWrapper actually works under Mac at all, and that my version has compiled right.)
 - Show versions that have already been wrapped
   - Display already wrapped versions with " - already wrapped" (text a wip) next to them. 
 - Change the way the uninstall button works (currently deletes ALL instances of RetroWrapper + library files, effectively removing itself completely). 
@@ -18,7 +18,7 @@ Todo:
 - Fix some other bugs / implement feature requests under "issues" if possible (note: I'm bad at Java though)
 - Verify that importing the whole project into Netbeans in a janky way hasn't broken anything. Also, that the compiler settings haven't broken anything.
 
-Note: I'm not the original author, but I'm assuming that they're not going to update this project anymore, so I'll use the current version scheme with the added -nerd tag (-ex-nerd for experimental releases / releases that haven't been verified / tested that much). Also, as there are no comments and I'm bad at Java, please tell me if any bugs arise due to my careless mistreatment of the codebase!
+Note: As I'm not the original author, there are no comments, and I'm bad at Java, please tell me if any bugs arise due to my careless mistreatment of the codebase! 
 
 # Legacy Readme: RetroWrapper
 Enables you to play _fixed_ old versions of minecraft without ever touching .jar files, works even when offline!
