@@ -10,9 +10,9 @@ Todo:
 - ~~Fix Max installer support~~ Fixed in 1.4.1 (note: confirm RetroWrapper actually works under Mac at all.)
 - Show versions that have already been wrapped
   - Display already wrapped versions with " - already wrapped" (text a wip) next to them. 
-- Change the way the uninstal button works (currently deletes ALL instances of RetroWrapper + library files, effectively reomving itself completely). 
-  - Make a new button with current functionality called "uninstal everything" (text a wip), and use current button to uninstal only one instance. (Note: swing sucks, espacially if you don't know how to use swing.)
-- Stop RetroWrapper installer from closing after each intallation
+- Change the way the uninstall button works (currently deletes ALL instances of RetroWrapper + library files, effectively removing itself completely). 
+  - Make a new button with current functionality called "uninstall everything" (text a wip), and use current button to uninstall only one instance. (Note: swing sucks, especially if you don't know how to use swing.)
+- Stop RetroWrapper installer from closing after each installation
   - Make RetroWrapper update the list of versions each time you instal / uninstal something
 - Implement some kind of batch installer / allow groups of versions to be wrapped at once (all beta, alpha, infdev etc or just everything)
 - Fix some other bugs / implement feature requests under "issues" if possible (note: I'm bad at Java though)
