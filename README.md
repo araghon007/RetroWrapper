@@ -1,6 +1,6 @@
 # RetroWrapper - NeRd fork
 
-This is a fork of RetroWrapper, which the original author seems to have abandoned. RetroWrapper works as a proxy between the lack of old mojang servers and your older versions of minecraft, by emulating these servers. I'm going to sit down and get to grips with it at some point, but for now I might mainly focus on smaller and easier to understand issues. No promises.
+This is a fork of RetroWrapper, which the original author seems to have abandoned. RetroWrapper works as a proxy between the lack of old mojang servers and your older versions of minecraft, by emulating these servers. I'm going to sit down and get to grips with it at some point, but for now I might mainly focus on smaller and easier to understand issues. Main changes will be just in the installer for now, as I don't want to break anything important and can't think of anything better to implement.
 
 Head to the releases tab to grab the newest version. 
 
@@ -8,11 +8,14 @@ Head to the releases tab to grab the newest version.
 Todo:
 
 - ~~Fix Max installer support~~ Fixed in 1.4.1 (note: confirm RetroWrapper actually works under Mac at all.)
-- Add support for installing mutiple versions at once
+- Show versions that have already been wrapped
+  - Display already wrapped versions with " - already wrapped" (text a wip) next to them. 
 - Change the way the uninstal button works (currently deletes ALL instances of RetroWrapper + library files, effectively reomving itself completely). 
-  - Show already wrapped versions. 
   - Make a new button with current functionality called "uninstal everything" (text a wip), and use current button to uninstal only one instance. (Note: swing sucks, espacially if you don't know how to use swing.)
-- Fix some bugs under "issues" if possible (note: I'm bad at Java though)
+- Stop RetroWrapper installer from closing after each intallation
+  - Make RetroWrapper update the list of versions each time you instal / uninstal something
+- Implement some kind of batch installer / allow groups of versions to be wrapped at once (all beta, alpha, infdev etc or just everything)
+- Fix some other bugs / implement feature requests under "issues" if possible (note: I'm bad at Java though)
 - Verify that importing the whole project into Netbeans in a janky way hasn't broken anything. Also, that the compiler settings haven't broken anything.
 
 # Legacy Readme: RetroWrapper
