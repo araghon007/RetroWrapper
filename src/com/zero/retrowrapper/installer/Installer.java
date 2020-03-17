@@ -29,6 +29,8 @@ import javax.swing.WindowConstants;
 
 public class Installer {
 
+	//test
+	
     String installerVersion = "1.4.1";
     String bonusText = "Now with Mac support!";
     
