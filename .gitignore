@@ -28,3 +28,4 @@ hs_err_pid*
 /.metadata/
 src/.project
 src/.classpath
+src/.settings/org.eclipse.jdt.core.prefs
