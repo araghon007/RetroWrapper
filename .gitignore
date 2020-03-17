@@ -11,3 +11,4 @@
 hs_err_pid*
 /target/
 /bin/
+.DS_Store
