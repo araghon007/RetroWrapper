@@ -16,7 +16,7 @@ Todo:
   - Make RetroWrapper update the list of versions each time you instal / uninstal something
 - Implement some kind of batch installer / allow groups of versions to be wrapped at once (all beta, alpha, infdev etc or just everything)
 - Fix some other bugs / implement feature requests under "issues" if possible (note: I'm bad at Java though)
-- Verify that importing the whole project into Netbeans in a janky way hasn't broken anything. Also, that the compiler settings haven't broken anything.
+- ~~Verify that importing the whole project into Netbeans in a janky way hasn't broken anything. Also, that the compiler settings haven't broken anything.~~ Eclipse might be better. 
 
 Note: As I'm not the original author, there are no comments, and I'm bad at Java, please tell me if any bugs arise due to my careless mistreatment of the codebase! 
 
