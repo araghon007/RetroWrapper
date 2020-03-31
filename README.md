@@ -7,7 +7,7 @@ Head to the releases tab to grab the newest version. The version scheme is the s
 
 Todo:
 
-- ~~Fix Max installer support~~ Fixed in 1.4.1 (note: confirm RetroWrapper actually works under Mac at all, and that my version has compiled right.)
+- ~~Fix Max installer support~~ Fixed in 1.4.1
 - Show versions that have already been wrapped
   - Display already wrapped versions with " - already wrapped" (text a wip) next to them. 
 - Change the way the uninstall button works (currently deletes ALL instances of RetroWrapper + library files, effectively removing itself completely). 
