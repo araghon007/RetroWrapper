@@ -31,27 +31,34 @@ public class Installer
 {
 	public Installer() throws Exception
 	{
+	    String installerVersion = "1.4.1";
+	    String bonusText = "Now with Mac support!";
+		
 		String workingDirectory = "";
+		String workingDirectoryName = "";
 		String OS = (System.getProperty("os.name")).toUpperCase();
 		if (OS.contains("WIN"))
 		{
 		    workingDirectory = System.getenv("AppData");
+		    workingDirectoryName = ".minecraft";
 		}
 		else if (OS.contains("OS X"))
 		{
-		    workingDirectory = "/Library/Application Support";
+		    workingDirectory = System.getProperty("user.home") + "/Library/Application Support";
+		    workingDirectoryName = "minecraft";
 		}else
 		{
 			workingDirectory = System.getProperty("user.home");
+			workingDirectoryName = ".minecraft";
 		}
 
-		workingDirectory = workingDirectory + File.separator + ".minecraft" + File.separator;
+		workingDirectory = workingDirectory + File.separator + workingDirectoryName + File.separator;
 		final File directory = new File(workingDirectory);
 		directory.mkdirs();
 		
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-		JFrame frame = new JFrame("Retrowrapper");
+		JFrame frame = new JFrame("Retrowrapper Unofficial Continuation");
 		frame.setPreferredSize(new Dimension(654, 310));
 		frame.setLayout(null);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -63,7 +70,7 @@ public class Installer
 		label.setBounds(0, 10, 654, 40);
 		frame.add(label);
 		
-		JLabel label3 = new JLabel("v1.4");
+		JLabel label3 = new JLabel(installerVersion + " - " + bonusText);
 		label3.setFont(label.getFont().deriveFont(12f));
 		label3.setHorizontalAlignment(SwingConstants.CENTER);
 		label3.setBounds(0, 30, 654, 40);
