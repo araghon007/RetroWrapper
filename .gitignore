@@ -30,3 +30,7 @@ src/.project
 src/.classpath
 src/.settings/org.eclipse.jdt.core.prefs
 libraries/
+.classpath
+.settings/org.eclipse.jdt.core.prefs
+.settings/org.eclipse.jdt.core.prefs
+.classpath
