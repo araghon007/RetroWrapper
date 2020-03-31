@@ -4,20 +4,6 @@ This fork of RetroWrapper mianly aims to fix minor bugs and implement some quali
 
 Head to the releases tab to grab the newest version. The version scheme is the same, but any releases by me are marked by the added -nerd tag (-ex-nerd for experimental releases / releases that haven't been verified / tested that much).
 
-
-Todo:
-
-- ~~Fix Max installer support~~ Fixed in 1.4.1
-- Show versions that have already been wrapped
-  - Display already wrapped versions with " - already wrapped" (text a wip) next to them. 
-- Change the way the uninstall button works (currently deletes ALL instances of RetroWrapper + library files, effectively removing itself completely). 
-  - Make a new button with current functionality called "uninstall everything" (text a wip), and use current button to uninstall only one instance. (Note: swing sucks, especially if you don't know how to use swing.)
-- Stop RetroWrapper installer from closing after each installation
-  - Make RetroWrapper update the list of versions each time you instal / uninstal something
-- Implement some kind of batch installer / allow groups of versions to be wrapped at once (all beta, alpha, infdev etc or just everything)
-- Fix some other bugs / implement feature requests under "issues" if possible (note: I'm bad at Java though)
-- ~~Verify that importing the whole project into Netbeans in a janky way hasn't broken anything. Also, that the compiler settings haven't broken anything.~~ Eclipse might be better. 
-
 Note: As I'm not the original author, there are no comments, and I'm bad at Java, please tell me if any bugs arise due to my careless mistreatment of the codebase! 
 
 # Legacy Readme: RetroWrapper
