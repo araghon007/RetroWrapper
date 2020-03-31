@@ -13,3 +13,6 @@ hs_err_pid*
 /bin/
 .DS_Store
 .metadata/
+src/.classpath
+src/.project
+src/.settings/org.eclipse.jdt.core.prefs
