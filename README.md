@@ -4,7 +4,7 @@ This fork of RetroWrapper mianly aims to fix minor bugs and implement some quali
 
 Head to the releases tab to grab the newest version. The version scheme is the same, but any releases by me are marked by the added "neRd-" tag (and "ex-neRd-" for experimental releases / releases that haven't been verified / tested that much).
 
-If you find any bugs I haven't added, please report them under the issues tab!
+If you find any bugs I don't know about, please report them under the issues tab!
 
 Note: As I'm not the original author, there are no comments, and I'm bad at Java, please tell me if any bugs arise due to my careless mistreatment of the codebase! 
 
