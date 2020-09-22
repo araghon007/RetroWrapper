@@ -8,14 +8,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.Base64;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
 import com.zero.retrowrapper.emulator.ByteUtils;
 import com.zero.retrowrapper.emulator.RetroEmulator;
 import com.zero.retrowrapper.emulator.registry.EmulatorHandler;
@@ -24,7 +28,7 @@ import com.zero.retrowrapper.emulator.registry.IHandler;
 public class SkinHandler extends EmulatorHandler implements IHandler
 {
 	private HashMap<String, byte[]> skinsCache = new HashMap<>();
-
+	
 	public SkinHandler(String url)
 	{
 		super(url);
@@ -63,19 +67,29 @@ public class SkinHandler extends EmulatorHandler implements IHandler
 	
 	private byte[] downloadSkin(String username) throws IOException
 	{
-		//need to rewrite this to use json
+		//using json now
 		
 		File skinCache = new File(RetroEmulator.getInstance().getCacheDirectory(), username + ".png");
 		
-		try(Scanner sc = new Scanner(new URL("https://api.mojang.com/users/profiles/minecraft/"+username+"?at="+System.currentTimeMillis()).openStream()))
-		{
-			String resp = sc.nextLine();
-			String uuid = resp.split("\"")[3].split("\"")[0];			
+		try(InputStreamReader reader = new InputStreamReader(new URL("https://api.mojang.com/users/profiles/minecraft/"+username+"?at="+System.currentTimeMillis()).openStream()))
+		{			
+			JsonObject profile1 = (JsonObject) Json.parse(reader);
+			String uuid = profile1.get("id").asString();			
 			System.out.println(uuid);
-			try(Scanner sc2 = new Scanner(new URL("https://sessionserver.mojang.com/session/minecraft/profile/"+uuid).openStream()))
+			try(InputStreamReader reader2 = new InputStreamReader(new URL("https://sessionserver.mojang.com/session/minecraft/profile/"+uuid).openStream()))
 			{
-				String base64 = sc2.nextLine().split("\"name\":\"textures\",\"value\":\"")[1].split("\"")[0];
-				String skinURL = new String(Base64.getDecoder().decode(base64)).split("\"SKIN\":\\{\"url\":\"")[1].split("\"")[0];
+				JsonObject profile2 = (JsonObject) Json.parse(reader2);
+				JsonArray properties = (JsonArray) profile2.get("properties");
+				String base64 = "";
+				for(JsonValue property : properties) {
+					JsonObject propertyj = property.asObject();
+					if(propertyj.get("name").asString().equalsIgnoreCase("textures"))
+						base64 = propertyj.get("value").asString();
+				}
+				JsonObject textures1 = (JsonObject) Json.parse(new String(Base64.getDecoder().decode(base64)));
+				JsonObject textures = (JsonObject) textures1.get("textures");
+				JsonObject skin = (JsonObject) textures.get("SKIN");
+				String skinURL = skin.get("url").asString();
 				
 				System.out.println(skinURL);
 				InputStream is = new URL(skinURL).openStream();
