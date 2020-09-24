@@ -44,8 +44,8 @@ public class Installer
 	JComboBox<String> list = new JComboBox<String>();
 	MutableComboBoxModel<String> model = (MutableComboBoxModel<String>)list.getModel(); //a surprise to be used later
 	
-    String installerVersion = "1.4.2";
-    String bonusText = "Now with more wrapping!"; 
+    String installerVersion = "1.4.3";
+    String bonusText = "Skins work now!"; 
 	
 	public String defaultWorkingDirectory() {
 		
@@ -167,13 +167,13 @@ public class Installer
 		
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		
-		JFrame frame = new JFrame("Retrowrapper Unofficial Continuation");
+		JFrame frame = new JFrame("Retrowrapper - NeRd Fork");
 		frame.setPreferredSize(new Dimension(654, 310));
 		frame.setLayout(null);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setResizable(false); //add resizing later
 		
-		JLabel label = new JLabel("Retrowrapper installer");
+		JLabel label = new JLabel("Retrowrapper Installer");
 		label.setFont(label.getFont().deriveFont(20f).deriveFont(Font.BOLD));
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setBounds(0, 10, 654, 40);
@@ -195,7 +195,7 @@ public class Installer
 		
 		frame.add(list);
 		
-		uninstall = new JButton("Uninstall all"); //uninstaller code
+		uninstall = new JButton("Uninstall ALL versions"); //uninstaller code
 		uninstall.setBounds(654/2 - 100, 202, 200, 30);
 		uninstall.addActionListener(new ActionListener()
 		{
