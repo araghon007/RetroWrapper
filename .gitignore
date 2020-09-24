@@ -1,3 +1,4 @@
+# general
 *.class
 *.log
 *.ctxt
@@ -9,10 +10,18 @@
 *.tar.gz
 *.rar
 hs_err_pid*
+
+# legacy eclipse ignores of dubious use
 /target/
 /bin/
-.DS_Store
 .metadata/
 src/.classpath
 src/.project
 src/.settings/org.eclipse.jdt.core.prefs
+
+# gradle
+build
+.gradle
+
+# mac os
+.DS_Store
