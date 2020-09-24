@@ -8,6 +8,8 @@ If you find any bugs I don't know about, please report them under the issues tab
 
 Note: As I'm not the original author, there are no comments, and I'm bad at Java, please tell me if any bugs arise due to my careless mistreatment of the codebase! 
 
+Double note: This software includes Kevin Kelley's Base64 encoder/decoder (Base64.java), which is being used under the GNU Lesser General Public License. A full copy of this license can be found in Base64-LICENSE.txt, which should be in the top-level directory of this repository.
+
 # Legacy Readme: RetroWrapper
 Enables you to play _fixed_ old versions of minecraft without ever touching .jar files, works even when offline!
 

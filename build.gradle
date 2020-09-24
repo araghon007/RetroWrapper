@@ -3,8 +3,8 @@ plugins {
     id 'maven-publish'
 }
 
-sourceCompatibility = 1.7 //todo fix Java 7 compatibility, a Java 8 library slipped in by accident
-targetCompatibility = 1.7 //it's sort of concerning it even compiles lmao
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 apply plugin: 'java'
 

@@ -44,8 +44,8 @@ public class Installer
 	JComboBox<String> list = new JComboBox<String>();
 	MutableComboBoxModel<String> model = (MutableComboBoxModel<String>)list.getModel(); //a surprise to be used later
 	
-    String installerVersion = "1.4.3";
-    String bonusText = "Skins work now!"; 
+    String installerVersion = "1.4.4";
+    String bonusText = "Skins & Java 7 work now!"; 
 	
 	public String defaultWorkingDirectory() {
 		

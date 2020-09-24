@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.Base64;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -24,6 +23,7 @@ import com.zero.retrowrapper.emulator.ByteUtils;
 import com.zero.retrowrapper.emulator.RetroEmulator;
 import com.zero.retrowrapper.emulator.registry.EmulatorHandler;
 import com.zero.retrowrapper.emulator.registry.IHandler;
+import com.zero.retrowrapper.util.Base64;
 
 public class SkinHandler extends EmulatorHandler implements IHandler
 {
@@ -86,7 +86,7 @@ public class SkinHandler extends EmulatorHandler implements IHandler
 					if(propertyj.get("name").asString().equalsIgnoreCase("textures"))
 						base64 = propertyj.get("value").asString();
 				}
-				JsonObject textures1 = (JsonObject) Json.parse(new String(Base64.getDecoder().decode(base64)));
+				JsonObject textures1 = (JsonObject) Json.parse(new String(Base64.decode(base64)));
 				JsonObject textures = (JsonObject) textures1.get("textures");
 				JsonObject skin = (JsonObject) textures.get("SKIN");
 				String skinURL = skin.get("url").asString();

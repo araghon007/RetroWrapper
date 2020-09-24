@@ -26,7 +26,9 @@ public class ListmapsHandler extends EmulatorHandler implements IHandler
 			
 			if(file.exists())
 			{
-				name = new Scanner(file).nextLine()+";";
+				Scanner tempScan = new Scanner(file);
+				name = tempScan.nextLine()+";";
+				tempScan.close();
 			}
 			
 			os.write(name.getBytes());

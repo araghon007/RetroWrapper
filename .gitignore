@@ -14,9 +14,13 @@ hs_err_pid*
 /target/
 /bin/
 .metadata/
+.classpath
+.project
 src/.classpath
 src/.project
 src/.settings/org.eclipse.jdt.core.prefs
+.settings/org.eclipse.buildship.core.prefs
+.settings/org.eclipse.jdt.core.prefs
 
 # gradle
 build
