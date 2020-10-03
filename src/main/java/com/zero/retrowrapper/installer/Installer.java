@@ -28,6 +28,8 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
+import com.zero.retrowrapper.util.Constants;
+
 public class Installer
 {
 
@@ -44,8 +46,8 @@ public class Installer
 	JComboBox<String> list = new JComboBox<String>();
 	MutableComboBoxModel<String> model = (MutableComboBoxModel<String>)list.getModel(); //a surprise to be used later
 
-	String installerVersion = "1.4.4";
-	String bonusText = "Skins & Java 7 work now!";
+	String installerVersion = Constants.installerVersion;
+	String bonusText = Constants.bonusText;
 
 	public String defaultWorkingDirectory() {
 

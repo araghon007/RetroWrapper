@@ -20,6 +20,22 @@ repositories {
 	}
 }
 
+version = project.version
+def versionText
+task checkRelease {
+	if (!(System.getenv("BUILD_RELEASE") == "true")) {
+		version += ("-SNAPSHOT+" + getTimestampSuffix())
+		versionText = project.devVersionText
+	} else {
+		versionText = project.versionText
+	}
+}
+
+def getTimestampSuffix() {
+	   def date = new Date()
+	   return date.format('yyyy-MM-dd_HHmmss')
+}
+
 sourceSets {
    main {
 	  java {
@@ -37,6 +53,30 @@ dependencies {
 		transitive = false
 	}
 	api 'net.sf.jopt-simple:jopt-simple:5.0.3'
+}
+
+task processSource (type: Sync, dependsOn: 'checkRelease') {
+
+	outputs.upToDateWhen { false }
+
+	from(sourceSets.main.java) {
+		// only process this file
+		include 'com/zero/retrowrapper/util/Constants.java'
+
+		// replace build variables
+		expand 'version':version, 'versionText':versionText
+	}
+
+	from(sourceSets.main.java) {
+		exclude 'com/zero/retrowrapper/util/Constants.java'
+	}
+
+	into "$buildDir/processedSource"
+}
+
+compileJava {
+	//use the processed source with replaced build variables
+	source = processSource.outputs
 }
 
 jar {
