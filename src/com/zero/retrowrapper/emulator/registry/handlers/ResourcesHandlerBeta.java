@@ -16,7 +16,7 @@ public class ResourcesHandlerBeta extends EmulatorHandler implements IHandler
 	{
 		super("/MinecraftResources/");
 	}
-	
+
 	@Override
 	public void handle(OutputStream os, String get, byte[] data) throws IOException
 	{

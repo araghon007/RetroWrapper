@@ -14,7 +14,7 @@ import com.zero.retrowrapper.emulator.registry.handlers.SkinHandler;
 public class EmulatorRegistry
 {
 	public List<IHandler> handlers = new ArrayList<IHandler>();
-	
+
 	private void register(EmulatorHandler handler)
 	{
 		handlers.add(handler);

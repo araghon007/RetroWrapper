@@ -10,16 +10,16 @@ import java.util.Map;
 import com.zero.retrowrapper.emulator.EmulatorConfig;
 
 public class LauncherFake extends Applet implements AppletStub
-{	
+{
 	private static final long serialVersionUID = 1L;
 
 	private Map<String, String> params = new HashMap<String, String>();
-	
+
 	public LauncherFake(Map<String, String> params, Applet applet)
 	{
 		this.params = params;
 	}
-	
+
 	@Override
 	public void appletResize(int width, int height) {}
 

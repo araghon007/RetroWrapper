@@ -15,10 +15,10 @@ public class ByteUtils
 		dis.read(bytes);
 		return new String(bytes);
 	}
-	
+
 	public static byte[] readFully(InputStream is) throws IOException
-	{		
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();						   	
+	{
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
 		byte[] buffer = new byte[8192];
 		int read = 0;
@@ -27,7 +27,7 @@ public class ByteUtils
 		{
 			bos.write(buffer, 0, read);
 			buffered += read;
-			
+
 			if(buffered > 1024 * 1024)
 			{
 				bos.flush();
@@ -41,7 +41,7 @@ public class ByteUtils
 	public static String readLine(DataInputStream dis) throws IOException
 	{
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		
+
 		while (true)
 		{
 			int b = dis.read();
@@ -51,7 +51,7 @@ public class ByteUtils
 			}
 			bos.write(b);
 		}
-		
+
 		return new String(bos.toByteArray());
 	}
 }

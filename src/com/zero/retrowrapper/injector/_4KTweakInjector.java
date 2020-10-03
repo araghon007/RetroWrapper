@@ -15,10 +15,10 @@ import java.util.HashMap;
 public class _4KTweakInjector implements IClassTransformer
 {
 	/**
-	 * 
+	 *
 	 * THIS IS MODIFIED VERSION OF ALPHAVANILLATWEAKINJECTOR
-	 *   ALL RIGHTS TO MOJANG
-	 * 
+	 *	 ALL RIGHTS TO MOJANG
+	 *
 	 */
 
 	@Override
@@ -61,7 +61,7 @@ public class _4KTweakInjector implements IClassTransformer
 				System.exit(1);
 			}
 		});
-	  
+
 		LauncherFake fakeLauncher = new LauncherFake(new HashMap<String, String>(), applet);
 		applet.setStub(fakeLauncher);
 

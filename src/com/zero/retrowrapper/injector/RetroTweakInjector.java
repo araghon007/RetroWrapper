@@ -22,10 +22,10 @@ import javax.imageio.ImageIO;
 public class RetroTweakInjector implements IClassTransformer
 {
 	/**
-	 * 
+	 *
 	 * THIS IS MODIFIED VERSION OF INDEVVANILLATWEAKINJECTOR
-	 *   ALL RIGHTS TO MOJANG
-	 * 
+	 *	 ALL RIGHTS TO MOJANG
+	 *
 	 */
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
@@ -38,26 +38,26 @@ public class RetroTweakInjector implements IClassTransformer
 			{
 				return null;
 			}
-				
+
 			final ClassReader cr = new ClassReader(bytesOld);
 			final ClassNode classNodeOld = new ClassNode();
 			cr.accept(classNodeOld, ClassReader.EXPAND_FRAMES);
 			RetroTweakClassWriter cw = new RetroTweakClassWriter(0, classNodeOld.name.replaceAll("/", "."));
 			ClassVisitor s = new ClassVisitor(ASM4, cw) {};
 			cr.accept(s, 0);
-			
+
 			byte[] bytes = cw.toByteArray();
-			
+
 			final ClassReader classReader = new ClassReader(bytes);
 			final ClassNode classNode = new ClassNode();
-			
+
 			classReader.accept(classNode, ClassReader.EXPAND_FRAMES);
-	
+
 			if (!classNode.interfaces.contains("java/lang/Runnable"))
 			{
 				return bytes;
 			}
-	
+
 			MethodNode runMethod = null;
 			for (final Object methodNode : classNode.methods)
 			{
@@ -68,25 +68,25 @@ public class RetroTweakInjector implements IClassTransformer
 					break;
 				}
 			}
-			
+
 			if (runMethod == null)
 			{
 				return bytes;
 			}
-	
+
 			System.out.println("Probably the Minecraft class (it has run && is applet!): " + name);
-	
+
 			final ListIterator<AbstractInsnNode> iterator = runMethod.instructions.iterator();
 			int firstSwitchJump = -1;
-	
+
 			while (iterator.hasNext())
 			{
 				AbstractInsnNode instruction = iterator.next();
-	
+
 				if (instruction.getOpcode() == TABLESWITCH)
 				{
 					TableSwitchInsnNode tableSwitchInsnNode = (TableSwitchInsnNode) instruction;
-	
+
 					firstSwitchJump = runMethod.instructions.indexOf((AbstractInsnNode) tableSwitchInsnNode.labels.get(0));
 				}
 				else if (firstSwitchJump >= 0 && runMethod.instructions.indexOf(instruction) == firstSwitchJump)
@@ -101,21 +101,21 @@ public class RetroTweakInjector implements IClassTransformer
 							break;
 						}
 					}
-	
+
 					if (endOfSwitch >= 0)
 					{
 						while (runMethod.instructions.indexOf(instruction) != endOfSwitch && iterator.hasNext())
 						{
 							instruction = iterator.next();
 						}
-	
+
 						instruction = iterator.next();
 						runMethod.instructions.insertBefore(instruction, new MethodInsnNode(INVOKESTATIC, "com/zero/retrowrapper/injector/RetroTweakInjector", "inject", "()Ljava/io/File;"));
 						runMethod.instructions.insertBefore(instruction, new VarInsnNode(ASTORE, 2));
 					}
 				}
 			}
-	
+
 			final ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
 			classNode.accept(writer);
 			return writer.toByteArray();
@@ -126,8 +126,8 @@ public class RetroTweakInjector implements IClassTransformer
 	}
 
 	public static File inject() throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException
-	{   	
-		System.out.println("Turning off ImageIO disk-caching");	
+	{
+		System.out.println("Turning off ImageIO disk-caching");
 		ImageIO.setUseCache(false);
 		RetroTweakInjector.loadIconsOnFrames();
 		System.out.println("Setting gameDir to: " + Launch.minecraftHome);
@@ -168,7 +168,7 @@ public class RetroTweakInjector implements IClassTransformer
 			arg9.printStackTrace();
 		}
 	}
-	
+
 	private static ByteBuffer loadIcon(File iconFile) throws IOException
 	{
 		BufferedImage icon = ImageIO.read(iconFile);

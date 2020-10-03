@@ -38,32 +38,32 @@ public class RetroTweakClassWriter extends ClassWriter
 
 		byte[] bytes = super.toByteArray();
 		List<Item> items = new ArrayList<>();
-		
+
 		for(Item item : e)
 		{
 			Item next = item;
-					
+
 			while(next != null)
-			{				
+			{
 				items.add(next);
 				next = next.k;
 			}
-		}		
-		
+		}
+
 		for(Item item : items)
 		{
 			item.a = writer.c++;
-			
+
 			if(item.b == LONG || item.b == DOUBLE)
 			{
 				writer.c++;
 			}
-			
+
 			int hash = item.j % writer.e.length;
 			item.k = writer.e[hash];
 			writer.e[hash] = item;
 		}
-		
+
 		for(Item item : items)
 		{
 			switch(item.b)
@@ -82,7 +82,7 @@ public class RetroTweakClassWriter extends ClassWriter
 						String finalstr = item.g;
 						finalstr = ((item.g.contains("https://") | item.g.contains("http://")) ? "http://" : "") + "127.0.0.1:"+EmulatorConfig.getInstance().getPort()+item.g.replace(finalstr.split(".com")[0]+".com", "");
 						System.out.println("Replaced with: " + finalstr);
-						writer.d.putByte(UTF8).putUTF8(finalstr);												
+						writer.d.putByte(UTF8).putUTF8(finalstr);
 					}
 					else if(item.g.contains(".net"))
 					{
@@ -99,7 +99,7 @@ public class RetroTweakClassWriter extends ClassWriter
 						}
 
 						System.out.println("Replaced with: " + finalstr);
-						
+
 						writer.d.putByte(UTF8).putUTF8(finalstr);
 					}
 					else
@@ -132,7 +132,7 @@ public class RetroTweakClassWriter extends ClassWriter
 					writer.d.putByte(INDY).putShort((int)item.d).putShort(writer.newNameType(item.g, item.h));
 					break;
 			}
-			
+
 			if(item.b >= HANDLE_BASE && item.b < TYPE_NORMAL)
 			{
 				int tag = item.b - HANDLE_BASE;
@@ -146,10 +146,10 @@ public class RetroTweakClassWriter extends ClassWriter
 				}
 			}
 		}
-		
+
 		ClassReader reader = new ClassReader(bytes);
 		reader.accept(writer, 0);
-		
+
 		return writer.toByteArray();
 	}
 }

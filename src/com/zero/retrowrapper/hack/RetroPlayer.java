@@ -10,17 +10,17 @@ public class RetroPlayer
 	public Object aabb;
 	public Class<?> entityClass;
 	public Object playerObj;
-	
+
 	public HackThread thread;
 	public Field playerField;
 	public Object minecraft;
 	private boolean modeFloat;
-	
+
 	public RetroPlayer(HackThread thread)
 	{
 		this.thread = thread;
 	}
-	
+
 	public void tick() throws IllegalArgumentException, IllegalAccessException, InterruptedException
 	{
 		try
@@ -44,7 +44,7 @@ public class RetroPlayer
 	public void setAABB() throws IllegalArgumentException, IllegalAccessException
 	{
 		boolean flag2 = false;
-		
+
 		for(Field f : entityClass.getDeclaredFields())
 		{
 			if(!flag2)
@@ -66,7 +66,7 @@ public class RetroPlayer
 		if(aabb != null)
 		{
 			int doubleCount = 0;
-			
+
 			label:
 			for(Field f : aabb.getClass().getDeclaredFields())
 			{
@@ -108,18 +108,18 @@ public class RetroPlayer
 	private double getX() throws IllegalArgumentException, IllegalAccessException
 	{
 		return getVariable(x, aabb);
-	}	
-	
+	}
+
 	private double getY() throws IllegalArgumentException, IllegalAccessException
 	{
 		return getVariable(y, aabb);
 	}
-	
+
 	private double getZ() throws IllegalArgumentException, IllegalAccessException
 	{
 		return getVariable(z, aabb);
 	}
-	
+
 	private double getVariable(Field f, Object o) throws IllegalArgumentException, IllegalAccessException
 	{
 		if(modeFloat)
@@ -148,7 +148,7 @@ public class RetroPlayer
 			z.set(aabb, dz);
 			x2.set(aabb, dx+ax);
 			y2.set(aabb, dy+ay);
-			z2.set(aabb, dz+az);			
+			z2.set(aabb, dz+az);
 		}
-	}	
+	}
 }

@@ -23,14 +23,14 @@ public class ListmapsHandler extends EmulatorHandler implements IHandler
 		{
 			File file = new File(RetroEmulator.getInstance().getMapsDirectory(), "map"+i+".txt");
 			String name = "-;";
-			
+
 			if(file.exists())
 			{
 				Scanner tempScan = new Scanner(file);
 				name = tempScan.nextLine()+";";
 				tempScan.close();
 			}
-			
+
 			os.write(name.getBytes());
 		}
 	}
