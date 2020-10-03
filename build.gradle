@@ -3,10 +3,13 @@ plugins {
 	id 'maven-publish'
 }
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
-
 apply plugin: 'java'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(7)
+	}
+}
 
 repositories {
 	mavenCentral()
@@ -20,7 +23,7 @@ repositories {
 sourceSets {
    main {
 	  java {
-		 srcDir 'src'
+		 srcDir 'src/main/java'
 	  }
    }
 }

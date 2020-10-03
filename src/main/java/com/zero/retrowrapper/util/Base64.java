@@ -2,27 +2,27 @@ package com.zero.retrowrapper.util;
 
 //////////////////////license & copyright header/////////////////////////
 ////
-//Base64 - encode/decode data using the Base64 encoding scheme     //
+//Base64 - encode/decode data using the Base64 encoding scheme	   //
 ////
-//Copyright (c) 1998 by Kevin Kelley                   //
+//Copyright (c) 1998 by Kevin Kelley				   //
 ////
-//This library is free software; you can redistribute it and/or       //
-//modify it under the terms of the GNU Lesser General Public          //
-//License as published by the Free Software Foundation; either        //
+//This library is free software; you can redistribute it and/or		  //
+//modify it under the terms of the GNU Lesser General Public		  //
+//License as published by the Free Software Foundation; either		  //
 //version 2.1 of the License, or (at your option) any later version.  //
 ////
-//This library is distributed in the hope that it will be useful,     //
-//but WITHOUT ANY WARRANTY; without even the implied warranty of      //
-//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the       //
-//GNU Lesser General Public License for more details.                 //
+//This library is distributed in the hope that it will be useful,	  //
+//but WITHOUT ANY WARRANTY; without even the implied warranty of	  //
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the		  //
+//GNU Lesser General Public License for more details.				  //
 ////
-//You should have received a copy of the GNU Lesser General Public    //
+//You should have received a copy of the GNU Lesser General Public	  //
 //License along with this library; if not, write to the Free Software //
-//Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA           //
-//02111-1307, USA, or contact the author:                             //
+//Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA			  //
+//02111-1307, USA, or contact the author:							  //
 ////
-//Kevin Kelley <kelley@ruralnet.net> - 30718 Rd. 28, La Junta, CO,    //
-//81050  USA.                                                         //
+//Kevin Kelley <kelley@ruralnet.net> - 30718 Rd. 28, La Junta, CO,	  //
+//81050	 USA.														  //
 ////
 ////////////////////end license & copyright header///////////////////////
 
@@ -97,7 +97,7 @@ public class Base64 {
 // our count of USABLE data so that...
 // (a) we don't misallocate the output array, and
 // (b) think that we miscalculated our data length
-//     just because of extraneous throw-away junk
+//	   just because of extraneous throw-away junk
 
 		int tempLen = data.length;
 		for (int ix = 0; ix < data.length; ix++) {
@@ -105,9 +105,9 @@ public class Base64 {
 				--tempLen; // ignore non-valid chars and padding
 		}
 // calculate required length:
-//  -- 3 bytes for every 4 valid base64 chars
-//  -- plus 2 bytes if there are 3 extra base64 chars,
-//     or plus 1 byte if there are 2 extra.
+//	-- 3 bytes for every 4 valid base64 chars
+//	-- plus 2 bytes if there are 3 extra base64 chars,
+//	   or plus 1 byte if there are 2 extra.
 
 		int len = (tempLen / 4) * 3;
 		if ((tempLen % 4) == 3)
@@ -188,7 +188,7 @@ public class Base64 {
 		boolean decode = false;
 
 		if (args.length == 0) {
-			System.out.println("usage:  java Base64 [-d[ecode]] filename");
+			System.out.println("usage:	java Base64 [-d[ecode]] filename");
 			System.exit(0);
 		}
 		for (int i = 0; i < args.length; i++) {
@@ -201,7 +201,7 @@ public class Base64 {
 		String filename = args[args.length - 1];
 		File file = new File(filename);
 		if (!file.exists()) {
-			System.out.println("Error:  file '" + filename + "' doesn't exist!");
+			System.out.println("Error:	file '" + filename + "' doesn't exist!");
 			System.exit(0);
 		}
 

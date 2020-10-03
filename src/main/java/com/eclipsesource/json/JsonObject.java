@@ -50,9 +50,9 @@ import com.eclipsesource.json.JsonObject.Member;
  * </p>
  * <pre>
  * for (Member member : jsonObject) {
- *   String name = member.getName();
- *   JsonValue value = member.getValue();
- *   ...
+ *	 String name = member.getName();
+ *	 JsonValue value = member.getValue();
+ *	 ...
  * }
  * </pre>
  * <p>

@@ -36,8 +36,8 @@ package com.eclipsesource.json;
  *
  * <pre>
  * ["lorem ipsum"]
- *  ^			^
- *  startString  endString
+ *	^			^
+ *	startString	 endString
  * </pre>
  * <p>
  * Subclasses that build an object representation of the parsed JSON can return arbitrary handler
