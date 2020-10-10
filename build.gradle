@@ -22,6 +22,7 @@ repositories {
 
 version = project.version
 def versionText
+
 task checkRelease {
 	if (!(System.getenv("BUILD_RELEASE") == "true")) {
 		version += ("-SNAPSHOT+" + getTimestampSuffix())
@@ -36,14 +37,6 @@ def getTimestampSuffix() {
 	   return date.format('yyyy-MM-dd_HHmmss')
 }
 
-sourceSets {
-   main {
-	  java {
-		 srcDir 'src/main/java'
-	  }
-   }
-}
-
 dependencies {
 	// asm
 	api 'org.ow2.asm:asm-all:5.2'
@@ -52,23 +45,22 @@ dependencies {
 	api ('net.minecraft:launchwrapper:1.12') {
 		transitive = false
 	}
+
+	// jopt
 	api 'net.sf.jopt-simple:jopt-simple:5.0.3'
 }
 
+/** This is a quick and dirty hack to automatically add some build constants to the source code when compiling. This task should probably be replaced at some point. */
 task processSource (type: Sync, dependsOn: 'checkRelease') {
-
+	duplicatesStrategy = DuplicatesStrategy.FAIL
 	outputs.upToDateWhen { false }
 
 	from(sourceSets.main.java) {
 		// only process this file
-		include 'com/zero/retrowrapper/util/Constants.java'
-
-		// replace build variables
-		expand 'version':version, 'versionText':versionText
-	}
-
-	from(sourceSets.main.java) {
-		exclude 'com/zero/retrowrapper/util/Constants.java'
+		filesMatching('com/zero/retrowrapper/util/Constants.java') {
+			// replace build variables
+			expand 'version':version, 'versionText':versionText
+		}
 	}
 
 	into "$buildDir/processedSource"
@@ -90,7 +82,7 @@ jar {
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
-				artifact(file("${project.buildDir}/libs/$archivesBaseName-${version}.jar")) {
+				artifact(jar.outputs.files.singleFile) {
 					builtBy build
 			}
 		}
