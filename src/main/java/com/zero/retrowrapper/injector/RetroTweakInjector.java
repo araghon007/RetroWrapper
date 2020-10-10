@@ -169,6 +169,7 @@ public class RetroTweakInjector implements IClassTransformer
 		}
 	}
 
+	@SuppressWarnings("unused") //I'm pretty sure this is used...
 	private static ByteBuffer loadIcon(File iconFile) throws IOException
 	{
 		BufferedImage icon = ImageIO.read(iconFile);
