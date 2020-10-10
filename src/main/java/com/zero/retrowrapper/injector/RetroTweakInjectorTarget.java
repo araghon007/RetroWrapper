@@ -47,8 +47,8 @@ public class RetroTweakInjectorTarget implements IClassTransformer
 	{
 
 		System.out.println("******************************");
-		System.out.println("*	  old mojang servers	 *");
-		System.out.println("*		emulator by 000		 *");
+		System.out.println("*     old mojang servers     *");
+		System.out.println("*       emulator by 000      *");
 		System.out.println("******************************");
 
 		new RetroEmulator().start();
