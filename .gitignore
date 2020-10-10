@@ -13,14 +13,13 @@ hs_err_pid*
 # legacy eclipse ignores of dubious use
 /target/
 /bin/
-.metadata/
 .classpath
 .project
+.metadata/
+.settings/
 src/.classpath
 src/.project
-src/.settings/org.eclipse.jdt.core.prefs
-.settings/org.eclipse.buildship.core.prefs
-.settings/org.eclipse.jdt.core.prefs
+src/.settings/
 
 # gradle
 build
