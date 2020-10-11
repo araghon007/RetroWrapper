@@ -61,7 +61,6 @@ shadowJar {
 	minimize()
 
 	from "README.md"
-	from "COMMONS-CODEC-LICENSE.txt"
 
 	// Hacky exclusions to minimise file size.
 	exclude 'org/**/*.txt'
