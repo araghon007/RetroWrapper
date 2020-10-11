@@ -66,8 +66,9 @@ shadowJar {
 	// Hacky exclusions to minimise file size.
 	exclude 'org/**/*.txt'
 	
-	// Relocate commons-codec to prevent it leaking into the classpath for other applications
+	// Relocate libraries to prevent them from leaking into the classpath for other applications
 	relocate 'commons-codec', 'com.zero.retrowrapper.shadow.commons-codec'
+	relocate 'com.eclipsesource.minimal-json', 'com.zero.retrowrapper.shadow.minimal-json'
 
 }
 
@@ -100,7 +101,11 @@ dependencies {
 	// jopt
 	api 'net.sf.jopt-simple:jopt-simple:5.0.3'
 
+	// commons-codec, for Base 64 decoding of skin strings
 	implementation 'commons-codec:commons-codec:1.15'
+
+	// minimal-json
+	implementation 'com.eclipsesource.minimal-json:minimal-json:0.9.5'
 }
 
 /** This is a quick and dirty hack to automatically add some build constants to the source code when compiling. This task should probably be replaced at some point. */
