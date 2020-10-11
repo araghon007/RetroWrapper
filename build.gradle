@@ -67,8 +67,8 @@ shadowJar {
 	exclude 'org/**/*.txt'
 	
 	// Relocate libraries to prevent them from leaking into the classpath for other applications
-	relocate 'commons-codec', 'com.zero.retrowrapper.shadow.commons-codec'
-	relocate 'com.eclipsesource.minimal-json', 'com.zero.retrowrapper.shadow.minimal-json'
+	relocate 'org.apache.commons.codec', 'com.zero.retrowrapper.shadow.commons-codec'
+	relocate 'com.eclipsesource.json', 'com.zero.retrowrapper.shadow.minimal-json'
 
 }
 
