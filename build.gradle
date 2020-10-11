@@ -53,9 +53,9 @@ repositories {
 
 shadowJar {
 	dependencies {
-		exclude(dependency('org.ow2.asm:asm-all:5.2'))
-		exclude(dependency('net.minecraft:launchwrapper:1.12'))
-		exclude(dependency('net.sf.jopt-simple:jopt-simple:5.0.3'))
+		exclude(dependency("org.ow2.asm:asm-all:${project.asmVersion}"))
+		exclude(dependency("net.minecraft:launchwrapper:${project.launchwrapperVersion}"))
+		exclude(dependency("net.sf.jopt-simple:jopt-simple:${project.joptSimpleVersion}"))
 	}
 
 	minimize()
@@ -90,21 +90,21 @@ def getTimestampSuffix() {
 
 dependencies {
 	// asm
-	api 'org.ow2.asm:asm-all:5.2'
+	api "org.ow2.asm:asm-all:${project.asmVersion}"
 
 	// launchwrapper + dependencies
-	api ('net.minecraft:launchwrapper:1.12') {
+	api ("net.minecraft:launchwrapper:${project.launchwrapperVersion}") {
 		transitive = false
 	}
 
 	// jopt
-	api 'net.sf.jopt-simple:jopt-simple:5.0.3'
+	api "net.sf.jopt-simple:jopt-simple:${project.joptSimpleVersion}"
 
 	// commons-codec, for Base 64 decoding of skin strings
-	implementation 'commons-codec:commons-codec:1.15'
+	implementation "commons-codec:commons-codec:${project.commonsCodecVersion}"
 
 	// minimal-json
-	implementation 'com.eclipsesource.minimal-json:minimal-json:0.9.5'
+	implementation "com.eclipsesource.minimal-json:minimal-json:${project.minimalJsonVersion}"
 }
 
 /** This is a quick and dirty hack to automatically add some build constants to the source code when compiling. This task should probably be replaced at some point. */
@@ -121,6 +121,10 @@ task processSource (type: Sync, dependsOn: 'checkRelease') {
 	}
 
 	into "$buildDir/processedSource"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
 }
 
 compileJava {
