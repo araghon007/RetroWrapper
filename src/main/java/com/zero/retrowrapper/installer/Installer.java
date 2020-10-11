@@ -18,6 +18,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 
 import javax.swing.JButton;
@@ -33,12 +34,14 @@ import javax.swing.WindowConstants;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
-import com.zero.retrowrapper.util.Constants;
+import com.zero.retrowrapper.util.MetadataUtil;
 
 public class Installer
 {
 
 	//I know that this is horrible code and practices. It will work for awhile, but when it breaks this message will make me or you despair that I didn't do a better job.
+
+	private final static Random rand = new Random();
 
 	int versionCount;
 	String workingDirectory;
@@ -50,9 +53,6 @@ public class Installer
 
 	JComboBox<String> list = new JComboBox<String>();
 	MutableComboBoxModel<String> model = (MutableComboBoxModel<String>)list.getModel(); //a surprise to be used later
-
-	String installerVersion = Constants.installerVersion;
-	String bonusText = Constants.bonusText;
 
 	public String defaultWorkingDirectory() {
 
@@ -186,7 +186,7 @@ public class Installer
 		label.setBounds(0, 10, 654, 40);
 		frame.add(label);
 
-		JLabel label3 = new JLabel(installerVersion + " - " + bonusText);
+		JLabel label3 = new JLabel(MetadataUtil.version + " - " + MetadataUtil.installerSplashes.get(rand.nextInt(MetadataUtil.installerSplashes.size())));
 		label3.setFont(label.getFont().deriveFont(12f));
 		label3.setHorizontalAlignment(SwingConstants.CENTER);
 		label3.setBounds(0, 30, 654, 40);
@@ -296,7 +296,7 @@ public class Installer
 					{
 						modifiedLaunchArgs = modifiedLaunchArgs.replace("--assetsDir ${game_assets}", "--assetsDir ${game_assets} --tweakClass com.zero.retrowrapper.RetroTweaker");
 					}
-					
+
 					versionJson.set("minecraftArguments", modifiedLaunchArgs);
 
 					File wrapDir = new File(versions, versionWrapped+File.separator);
@@ -315,10 +315,10 @@ public class Installer
 					{
 						ee.printStackTrace();
 					}
-				} catch (IOException ee) 
+				} catch (IOException ee)
 				{
 					ee.printStackTrace();
-					// TODO Better error handling 
+					// TODO Better error handling
 				}
 
 				JOptionPane.showMessageDialog(null, "Successfully wrapped version\n"+version, "Success", JOptionPane.INFORMATION_MESSAGE);
