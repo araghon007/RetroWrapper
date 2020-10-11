@@ -65,6 +65,9 @@ shadowJar {
 
 	// Hacky exclusions to minimise file size.
 	exclude 'org/**/*.txt'
+	
+	// Relocate commons-codec tp prevent it leaking into the classpath for other applications
+	relocate 'commons-codec', 'com.zero.retrowrapper.shadow.commons-codec'
 
 }
 
