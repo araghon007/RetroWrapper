@@ -7,7 +7,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.net.URLDecoder;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -28,6 +30,9 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
 import com.zero.retrowrapper.util.Constants;
 
 public class Installer
@@ -263,22 +268,36 @@ public class Installer
 			{
 				String version = (String)list.getSelectedItem();
 
-				try(Scanner s = new Scanner(new File(versions, version+File.separator+version+".json")).useDelimiter("\\A"))
+				try(Reader s = new FileReader(new File(versions, version+File.separator+version+".json")))
 				{
-					String json = s.next();
+
+					JsonObject versionJson = Json.parse(s).asObject();
 					String versionWrapped = version+"-wrapped";
 
-					json = json.replace("\"libraries\": [", "\"libraries\": [{\"name\": \"com.zero:retrowrapper:installer\"},");
-					json = json.replace("\"libraries\":[", "\"libraries\":[{\"name\": \"com.zero:retrowrapper:installer\"},");
-					json = json.replace("\""+version+"\"", "\""+versionWrapped+"\"");
-					if(json.contains("VanillaTweaker"))
+					// Add the RetroWrapper library to the list of libraries. A library is a JSON object, and libraries are stored in an array of JSON objects.
+					JsonObject retrowrapperLibraryJson = Json.object().add("name", "com.zero:retrowrapper:installer");
+					JsonValue newLibraries = versionJson.get("libraries");
+					newLibraries.asArray().add(retrowrapperLibraryJson);
+					versionJson.set("libraries", newLibraries);
+
+					// Replace version ID with the wrapped version ID (e.g "c0.30-3" with "c0.30-3-wrapped")
+					if (!versionJson.getString("id", "null").equals(version)) {
+						JOptionPane.showMessageDialog(null, "The version ID " + versionJson.getString("id", "null") + " found in the JSON file " + version+File.separator+version+".json" + "did not match the expected version ID " + version + ". Things will not go as planned!", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+					versionJson.set("id",  versionWrapped);
+
+					// Replace any of Mojangs tweakers with RetroWrapper tweakers
+					String modifiedLaunchArgs = versionJson.getString("minecraftArguments", "null");
+					if(modifiedLaunchArgs.contains("VanillaTweaker"))
 					{
-						json = json.replace("net.minecraft.launchwrapper.AlphaVanillaTweaker", "com.zero.retrowrapper.RetroTweaker");
-						json = json.replace("net.minecraft.launchwrapper.IndevVanillaTweaker", "com.zero.retrowrapper.RetroTweaker");
+						modifiedLaunchArgs = modifiedLaunchArgs.replace("net.minecraft.launchwrapper.AlphaVanillaTweaker", "com.zero.retrowrapper.RetroTweaker");
+						modifiedLaunchArgs = modifiedLaunchArgs.replace("net.minecraft.launchwrapper.IndevVanillaTweaker", "com.zero.retrowrapper.RetroTweaker");
 					}else
 					{
-						json = json.replace("--assetsDir ${game_assets}", "--assetsDir ${game_assets} --tweakClass com.zero.retrowrapper.RetroTweaker");
+						modifiedLaunchArgs = modifiedLaunchArgs.replace("--assetsDir ${game_assets}", "--assetsDir ${game_assets} --tweakClass com.zero.retrowrapper.RetroTweaker");
 					}
+					
+					versionJson.set("minecraftArguments", modifiedLaunchArgs);
 
 					File wrapDir = new File(versions, versionWrapped+File.separator);
 					wrapDir.mkdirs();
@@ -288,7 +307,7 @@ public class Installer
 					try(FileOutputStream fos = new FileOutputStream(new File(wrapDir, versionWrapped+".json")))
 					{
 						Files.copy(new File(versions, version+File.separator+version+".jar").toPath(), new File(wrapDir, versionWrapped+".jar").toPath(), StandardCopyOption.REPLACE_EXISTING);
-						fos.write(json.getBytes());
+						fos.write(versionJson.toString().getBytes());
 						fos.close();
 						File jar = new File(URLDecoder.decode(Installer.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8"));
 						Files.copy(jar.toPath(), new File(libDir, "retrowrapper-installer.jar").toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -296,9 +315,10 @@ public class Installer
 					{
 						ee.printStackTrace();
 					}
-				} catch (FileNotFoundException ee)
+				} catch (IOException ee) 
 				{
 					ee.printStackTrace();
+					// TODO Better error handling 
 				}
 
 				JOptionPane.showMessageDialog(null, "Successfully wrapped version\n"+version, "Success", JOptionPane.INFORMATION_MESSAGE);
