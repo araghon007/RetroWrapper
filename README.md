@@ -1,14 +1,12 @@
 # RetroWrapper - NeRd fork
 
-This fork of RetroWrapper mianly aims to fix minor bugs and implement some quality of life changes. RetroWrapper works as a proxy between the lack of old mojang servers and your older versions of minecraft, by emulating these servers. I'm going to sit down and get to grips with the more complicated emulation code at some point, but for now I want to mainly focus on smaller and easier to understand issues. Main changes will be just in the installer for now, as I don't want to break anything important and can't think of anything better to do.
+This fork of RetroWrapper aims to fix bugs and implement some quality of life changes.
 
-Head to the releases tab to grab the newest version. The version scheme is the same, but any releases by me are marked by the added "neRd-" tag (and "ex-neRd-" for experimental releases / releases that haven't been verified / tested that much).
+Head to the [releases page](https://github.com/NeRdTheNed/RetroWrapper/releases) to grab the newest version! If you find any issues I don't know about or I've accidentally introduced, please report them on the [issues page](https://github.com/NeRdTheNed/RetroWrapper/issues)!
 
-If you find any bugs I don't know about, please report them under the issues tab!
+Note: Binary distributions of this software bundle classes from the Apache Commons Codec library, which is licensed under the Apache License Version 2.0. A full copy of this license can be found in COMMONS-CODEC-LICENSE.txt, which should be in the top-level directory of this repository. Binary distributions also include this information under META-INF.
 
-Note: As I'm not the original author, there are no comments, and I'm bad at Java, please tell me if any bugs arise due to my careless mistreatment of the codebase! 
-
-# Legacy Readme: RetroWrapper
+# Original Readme
 Enables you to play _fixed_ old versions of minecraft without ever touching .jar files, works even when offline!
 
 Needs Java 7 or higher!!

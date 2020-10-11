@@ -1,0 +1,151 @@
+plugins {
+	id 'java-library'
+	id 'maven-publish'
+	id 'com.github.johnrengelman.shadow' version '6.1.0'
+	//id 'checkstyle' // TODO: This is a reminder for me to setup checkstyle.
+}
+
+// Reproducible builds! https://docs.gradle.org/4.9/userguide/working_with_files.html#sec:reproducible_archives
+// Note: snapshots are not reproducible due to replacing constants in the source code. Might rethink that.
+tasks.withType(AbstractArchiveTask) {
+	preserveFileTimestamps = false
+	reproducibleFileOrder = true
+}
+
+apply plugin: 'java'
+
+// TODO: This is a reminder for me to setup checkstyle.
+/* apply plugin: 'checkstyle'
+
+configurations {
+  checkstyleConfig
+}
+
+def versions = [
+  checkstyle: '6.2',
+]
+
+dependencies {
+  checkstyleConfig ("com.puppycrawl.tools:checkstyle:${versions.checkstyle}") {
+		transitive = false
+	}
+}
+
+checkstyle {
+  toolVersion = "${versions.checkstyle}"
+  config = resources.text.fromArchiveEntry(configurations.checkstyleConfig, 'google_checks.xml')
+} */
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(7)
+	}
+}
+
+repositories {
+	mavenCentral()
+	jcenter()
+	maven {
+		name = 'mojang'
+		url = 'https://libraries.minecraft.net/'
+	}
+}
+
+shadowJar {
+	dependencies {
+		exclude(dependency("org.ow2.asm:asm-all:${project.asmVersion}"))
+		exclude(dependency("net.minecraft:launchwrapper:${project.launchwrapperVersion}"))
+		exclude(dependency("net.sf.jopt-simple:jopt-simple:${project.joptSimpleVersion}"))
+	}
+
+	minimize()
+
+	from "README.md"
+
+	// Hacky exclusions to minimise file size.
+	exclude 'org/**/*.txt'
+	
+	// Relocate libraries to prevent them from leaking into the classpath for other applications
+	relocate 'org.apache.commons.codec', 'com.zero.retrowrapper.shadow.commons-codec'
+	relocate 'com.eclipsesource.json', 'com.zero.retrowrapper.shadow.minimal-json'
+
+}
+
+version = project.version
+def versionText
+
+task checkRelease {
+	if (!(System.getenv("BUILD_RELEASE") == "true")) {
+		version += ("-SNAPSHOT+" + getTimestampSuffix())
+		versionText = project.devVersionText
+	} else {
+		versionText = project.versionText
+	}
+}
+
+def getTimestampSuffix() {
+	   def date = new Date()
+	   return date.format('yyyy-MM-dd_HHmmss')
+}
+
+dependencies {
+	// asm
+	api "org.ow2.asm:asm-all:${project.asmVersion}"
+
+	// launchwrapper + dependencies
+	api ("net.minecraft:launchwrapper:${project.launchwrapperVersion}") {
+		transitive = false
+	}
+
+	// jopt
+	api "net.sf.jopt-simple:jopt-simple:${project.joptSimpleVersion}"
+
+	// commons-codec, for Base 64 decoding of skin strings
+	implementation "commons-codec:commons-codec:${project.commonsCodecVersion}"
+
+	// minimal-json
+	implementation "com.eclipsesource.minimal-json:minimal-json:${project.minimalJsonVersion}"
+}
+
+/** This is a quick and dirty hack to automatically add some build constants to the source code when compiling. This task should probably be replaced at some point. */
+task processSource (type: Sync, dependsOn: 'checkRelease') {
+	duplicatesStrategy = DuplicatesStrategy.FAIL
+	outputs.upToDateWhen { false }
+
+	from(sourceSets.main.java) {
+		// only process this file
+		filesMatching('com/zero/retrowrapper/util/Constants.java') {
+			// replace build variables
+			expand 'version':version, 'versionText':versionText
+		}
+	}
+
+	into "$buildDir/processedSource"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+compileJava {
+	//use the processed source with replaced build variables
+	source = processSource.outputs
+}
+
+jar {
+	manifest {
+		attributes (
+			'Main-Class': 'com.zero.retrowrapper.installer.Installer'
+		)
+	}
+	enabled = false
+	dependsOn(shadowJar { classifier = null })
+}
+
+publishing {
+	publications {
+		mavenJavaShadow(MavenPublication) { publication ->
+		  project.shadow.component(publication)
+		}
+	}
+}
