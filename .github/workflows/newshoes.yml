@@ -1,15 +1,10 @@
-name: Build on release
-
+name: Daily test build against latest Gradle RC
 on:
-  release:
-    types:
-      - published
-
+  schedule:
+    - cron: 0 0 * * * # daily
 jobs:
-  build:
-
+  gradle-rc:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -20,13 +15,11 @@ jobs:
     - name: Build with Gradle
       uses: eskatos/gradle-command-action@v1
       with:
-        gradle-version: wrapper
+        gradle-version: rc
         wrapper-cache-enabled: false
         dependencies-cache-enabled: false
         configuration-cache-enabled: false
         arguments: build
-      env:
-        BUILD_RELEASE: ${{ github.event.release.prerelease == false }}
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:

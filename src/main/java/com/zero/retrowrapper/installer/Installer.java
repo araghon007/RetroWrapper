@@ -39,40 +39,31 @@ import com.zero.retrowrapper.util.MetadataUtil;
 public class Installer
 {
 
-	//I know that this is horrible code and practices. It will work for awhile, but when it breaks this message will make me or you despair that I didn't do a better job.
-
 	private final static Random rand = new Random();
 
-	int versionCount;
-	String workingDirectory;
-	File directory;
-	File[] directories;
-	File versions;
-	JButton install;
-	JButton uninstall;
+	//TODO: F1X TH1S. Everything must go!
+	static int versionCount;
+	static String workingDirectory;
+	static File directory;
+	static File[] directories;
+	static File versions;
+	static JButton install;
+	static JButton uninstall;
 
-	JComboBox<String> list = new JComboBox<String>();
-	MutableComboBoxModel<String> model = (MutableComboBoxModel<String>)list.getModel(); //a surprise to be used later
+	static JComboBox<String> list = new JComboBox<String>();
+	static MutableComboBoxModel<String> model = (MutableComboBoxModel<String>)list.getModel();
 
 	public String defaultWorkingDirectory() {
 
 		String OS = (System.getProperty("os.name")).toUpperCase();
 
-		String defaultWorkingDirectory;
-
-		if (OS.contains("WIN")) //windows uses the %appdata%/.minecraft structure
-		{
-			defaultWorkingDirectory = System.getenv("AppData") + File.separator + ".minecraft";
+		if (OS.contains("WIN")) { // windows uses the %appdata%/.minecraft structure
+			return (System.getenv("AppData") + File.separator + ".minecraft");
+		} else if (OS.contains("MAC")) { // mac os uses %user%/Library/Library/Application Support/minecraft
+			return (System.getProperty("user.home") + File.separator + "Library" + File.separator + "Application Support" + File.separator + "minecraft");
+		} else {
+			return (System.getProperty("user.home") + File.separator + ".minecraft");
 		}
-		else if (OS.contains("MAC")) //mac os uses %user%/Library/Library/Application Support/minecraft
-		{
-			defaultWorkingDirectory = System.getProperty("user.home") + File.separator + "Library" + File.separator + "Application Support" + File.separator + "minecraft";
-		}else
-		{
-			defaultWorkingDirectory = System.getProperty("user.home") + File.separator + ".minecraft";
-		}
-
-		return defaultWorkingDirectory;
 
 	}
 
@@ -89,54 +80,48 @@ public class Installer
 			directories = null;
 			versions = new File(directory, "versions");
 
-			if(versions.exists())
-			{
+			if (versions.exists()) {
 				directories = versions.listFiles();
 			}
 
-			if(!(directories == null || directories.length == 0)) {
+			if (!(directories == null || directories.length == 0)) {
 
-			Arrays.sort(directories);
+				Arrays.sort(directories);
 
-			//add items
+				// add items
 
-			for(File f : directories)
-			{
-				if(f.isDirectory())
-			{
-				versionCount++;
-				File json = new File(f, f.getName() + ".json");
-				File jar = new File(f, f.getName() + ".jar");
-				if(json.exists() && jar.exists() && !f.getName().contains("-wrapped") && !new File(versions, f.getName()+"-wrapped").exists())
-				{
-					try(Scanner s = new Scanner(json).useDelimiter("\\A"))
-					{
-						String content = s.next();
-						if (content.contains("old_") && !content.contains("retrowrapper")) {
-							model.addElement(f.getName());
-						}
-						} catch (FileNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+				for (File f : directories) {
+					if (f.isDirectory()) {
+						versionCount++;
+						File json = new File(f, f.getName() + ".json");
+						File jar = new File(f, f.getName() + ".jar");
+						if (json.exists() && jar.exists() && !f.getName().contains("-wrapped") && !new File(versions, f.getName() + "-wrapped").exists()) {
+							try (Scanner s = new Scanner(json).useDelimiter("\\A")) {
+								String content = s.next();
+								if (content.contains("old_") && !content.contains("retrowrapper")) {
+									model.addElement(f.getName());
+								}
+							} catch (FileNotFoundException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 					}
 				}
+
 			}
-
-		}
 		}
 
-		//button visibility
+		// button visibility
 
 		if (givenDirectory.isEmpty()) {
 
 			install.setEnabled(false);
 			uninstall.setEnabled(false);
 
-		JOptionPane.showMessageDialog(null, "No directory / minecraft directory detected!\n", "Error", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "No directory / minecraft directory detected!\n", "Error", JOptionPane.INFORMATION_MESSAGE);
 
-		} else if(!versions.exists())
-		{
+		} else if (!versions.exists()) {
 			install.setEnabled(false);
 			uninstall.setEnabled(false);
 
@@ -336,13 +321,10 @@ public class Installer
 		refreshList(workingDirectory);
 	}
 
-	public static void main(String[] args)
-	{
-		try
-		{
+	public static void main(String[] args) {
+		try {
 			new Installer();
-		}catch(Exception e)
-		{
+		} catch(Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Exception occured!\n"+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}

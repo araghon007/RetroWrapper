@@ -6,7 +6,6 @@ plugins {
 }
 
 // Reproducible builds! https://docs.gradle.org/4.9/userguide/working_with_files.html#sec:reproducible_archives
-// Note: snapshots are not reproducible due to replacing constants in the source code. Might rethink that.
 tasks.withType(AbstractArchiveTask) {
 	preserveFileTimestamps = false
 	reproducibleFileOrder = true
@@ -60,16 +59,19 @@ shadowJar {
 
 	minimize()
 
-	from "README.md"
-
 	// Hacky exclusions to minimise file size.
 	exclude 'org/**/*.txt'
+	exclude 'META-INF/maven/**/*.*'
+
+	// Currently, this merges all licences from each library into one file, as well as the same for notices.
+	// TODO: Come up with a better way to do this. Ideally I'd rename the file based on the library.
+	append 'META-INF/LICENSE.txt'
+	append 'META-INF/NOTICE.txt'
 
 	// Relocate libraries to prevent them from leaking into the classpath for other applications
 	relocate 'org.apache.commons.codec', 'com.zero.retrowrapper.shadow.commons-codec'
 	relocate 'org.apache.commons.io', 'com.zero.retrowrapper.shadow.commons-io'
 	relocate 'com.eclipsesource.json', 'com.zero.retrowrapper.shadow.minimal-json'
-
 }
 
 version = project.version
@@ -81,8 +83,8 @@ task checkRelease {
 }
 
 def getTimestampSuffix() {
-	   def date = new Date()
-	   return date.format('yyyy-MM-dd_HHmmss')
+	def date = new Date()
+	return date.format('yyyy-MM-dd_HHmmss')
 }
 
 dependencies {
@@ -108,12 +110,14 @@ dependencies {
 }
 
 processResources {
+	inputs.property "version", project.version // Redo this task when version value changes.
 	filesMatching('com/zero/retrowrapper/retrowrapperVersion.txt') {
 		// replace build variables
 		expand 'version':version
 	}
 }
 
+// Ensures that the encoding of source files is set to UTF-8, see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
 tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
 }
@@ -128,10 +132,26 @@ jar {
 	dependsOn(shadowJar { classifier = null })
 }
 
+// This task creates a .jar file containing the source code of this project.
+task sourcesJar(type: Jar) {
+	classifier = "sources"
+	from sourceSets.main.allSource
+}
+
+artifacts {
+	archives sourcesJar
+}
+
 publishing {
 	publications {
-		mavenJavaShadow(MavenPublication) { publication ->
-		  project.shadow.component(publication)
+		mavenJava(MavenPublication) {
+			// Shadowed .jar
+			publication -> project.shadow.component(publication)
+
+			// Source code in a .jar
+			artifact(sourcesJar) {
+				builtBy sourcesJar
+			}
 		}
 	}
 }
