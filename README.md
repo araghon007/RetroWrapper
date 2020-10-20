@@ -64,11 +64,11 @@ Copy that folder you want to patch and add -retro to its name (eg. c0.30_01 to c
 Go inside that folder and add -retro to all filenames inside it
 
 Edit <version>.json and
-  
+
 - add -retro to id (eg. replace **"id": "c0.30_01c",* with *"id": "c0.30_01c-retro",**)
 - replace **"libraries":** with **"libraries": [{"name": "com.zero:retrowrapper:1.2"},**
 - replace **--tweakClass net.minecraft.launchwrapper....VanillaTweaker** with **--tweakClass com.zero.retrowrapper.RetroTweaker**
-  
+
 Launch Minecraft and choose newly created version!
 
 
