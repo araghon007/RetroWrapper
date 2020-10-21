@@ -5,8 +5,7 @@ import java.util.List;
 
 import com.zero.retrowrapper.emulator.EmulatorConfig;
 
-public class RetroTweakClassWriter extends ClassWriter
-{
+public class RetroTweakClassWriter extends ClassWriter {
 	private static final int CLASS = 7;
 	private static final int FIELD = 9;
 	private static final int METH = 10;
@@ -25,37 +24,30 @@ public class RetroTweakClassWriter extends ClassWriter
 	private static final int TYPE_NORMAL = 30;
 	private String className;
 
-	public RetroTweakClassWriter(int a, String className)
-	{
+	public RetroTweakClassWriter(int a, String className) {
 		super(a);
 		this.className = className;
 	}
 
 	@Override
-	public byte[] toByteArray()
-	{
+	public byte[] toByteArray() {
 		ClassWriter writer = new ClassWriter(0);
-
 		byte[] bytes = super.toByteArray();
 		List<Item> items = new ArrayList<>();
 
-		for(Item item : e)
-		{
+		for (Item item : e) {
 			Item next = item;
 
-			while(next != null)
-			{
+			while (next != null) {
 				items.add(next);
 				next = next.k;
 			}
 		}
 
-		for(Item item : items)
-		{
+		for (Item item : items) {
 			item.a = writer.c++;
 
-			if(item.b == LONG || item.b == DOUBLE)
-			{
+			if (item.b == LONG || item.b == DOUBLE) {
 				writer.c++;
 			}
 
@@ -64,84 +56,74 @@ public class RetroTweakClassWriter extends ClassWriter
 			writer.e[hash] = item;
 		}
 
-		for(Item item : items)
-		{
-			switch(item.b)
-			{
-				case UTF8:
-					if(item.g.contains("random.splash") || item.g.contains("char.png"))
-					{
-						if(EmulatorConfig.getInstance().mobClass == null)
-						{
-							EmulatorConfig.getInstance().mobClass = className;
-						}
+		for (Item item : items) {
+			switch (item.b) {
+			case UTF8:
+				if (item.g.contains("random.splash") || item.g.contains("char.png")) {
+					if (EmulatorConfig.getInstance().mobClass == null) {
+						EmulatorConfig.getInstance().mobClass = className;
 					}
-					else if(item.g.contains(".com"))
-					{
-						System.out.println("Found URL!: " + item.g);
-						String finalstr = item.g;
-						finalstr = ((item.g.contains("https://") | item.g.contains("http://")) ? "http://" : "") + "127.0.0.1:"+EmulatorConfig.getInstance().getPort()+item.g.replace(finalstr.split(".com")[0]+".com", "");
-						System.out.println("Replaced with: " + finalstr);
-						writer.d.putByte(UTF8).putUTF8(finalstr);
-					}
-					else if(item.g.contains(".net"))
-					{
-						System.out.println("Found URL!: " + item.g);
-						String finalstr = item.g;
+				} else if (item.g.contains(".com")) {
+					System.out.println("Found URL!: " + item.g);
+					String finalstr = item.g;
+					finalstr = ((item.g.contains("https://") | item.g.contains("http://")) ? "http://" : "") + "127.0.0.1:" + EmulatorConfig.getInstance().getPort() + item.g.replace(finalstr.split(".com")[0] + ".com", "");
+					System.out.println("Replaced with: " + finalstr);
+					writer.d.putByte(UTF8).putUTF8(finalstr);
+				} else if (item.g.contains(".net")) {
+					System.out.println("Found URL!: " + item.g);
+					String finalstr = item.g;
 
-						if(finalstr.equals("minecraft.net"))
-						{
-							finalstr = "127.0.0.1";
-						}
-						else
-						{
-							finalstr = (item.g.contains("https://") ? "https://" : "") + (item.g.contains("http://") ? "http://" : "") + "127.0.0.1:"+EmulatorConfig.getInstance().getPort()+item.g.replace(finalstr.split(".net")[0]+".net", "");
-						}
-
-						System.out.println("Replaced with: " + finalstr);
-
-						writer.d.putByte(UTF8).putUTF8(finalstr);
+					if (finalstr.equals("minecraft.net")) {
+						finalstr = "127.0.0.1";
+					} else {
+						finalstr = (item.g.contains("https://") ? "https://" : "") + (item.g.contains("http://") ? "http://" : "") + "127.0.0.1:" + EmulatorConfig.getInstance().getPort() + item.g.replace(finalstr.split(".net")[0] + ".net", "");
 					}
-					else
-					{
-						writer.d.putByte(UTF8).putUTF8(item.g);
-					}
-					break;
-				case CLASS:
-				case STR:
-				case MTYPE:
-					writer.d.putByte(item.b).putShort(writer.newUTF8(item.g));
-					break;
-				case INT:
-				case FLOAT:
-					writer.d.putByte(item.b).putInt(item.c);
-					break;
-				case LONG:
-				case DOUBLE:
-					writer.d.putByte(item.b).putLong(item.d);
-					break;
-				case FIELD:
-				case METH:
-				case IMETH:
-					writer.d.putByte(item.b).putShort(writer.newClass(item.g)).putShort(writer.newNameType(item.h, item.i));
-					break;
-				case NAME_TYPE:
-					writer.d.putByte(item.b).putShort(writer.newUTF8(item.g)).putShort(writer.newUTF8(item.h));
-					break;
-				case INDY:
-					writer.d.putByte(INDY).putShort((int)item.d).putShort(writer.newNameType(item.g, item.h));
-					break;
+
+					System.out.println("Replaced with: " + finalstr);
+					writer.d.putByte(UTF8).putUTF8(finalstr);
+				} else {
+					writer.d.putByte(UTF8).putUTF8(item.g);
+				}
+
+				break;
+
+			case CLASS:
+			case STR:
+			case MTYPE:
+				writer.d.putByte(item.b).putShort(writer.newUTF8(item.g));
+				break;
+
+			case INT:
+			case FLOAT:
+				writer.d.putByte(item.b).putInt(item.c);
+				break;
+
+			case LONG:
+			case DOUBLE:
+				writer.d.putByte(item.b).putLong(item.d);
+				break;
+
+			case FIELD:
+			case METH:
+			case IMETH:
+				writer.d.putByte(item.b).putShort(writer.newClass(item.g)).putShort(writer.newNameType(item.h, item.i));
+				break;
+
+			case NAME_TYPE:
+				writer.d.putByte(item.b).putShort(writer.newUTF8(item.g)).putShort(writer.newUTF8(item.h));
+				break;
+
+			case INDY:
+				writer.d.putByte(INDY).putShort((int)item.d).putShort(writer.newNameType(item.g, item.h));
+				break;
 			}
 
-			if(item.b >= HANDLE_BASE && item.b < TYPE_NORMAL)
-			{
+			if (item.b >= HANDLE_BASE && item.b < TYPE_NORMAL) {
 				int tag = item.b - HANDLE_BASE;
-				if (tag <= Opcodes.H_PUTSTATIC)
-				{
+
+				if (tag <= Opcodes.H_PUTSTATIC) {
 					writer.d.putByte(HANDLE).putByte(tag).putShort(writer.newField(item.g, item.h, item.i));
-				}
-				else
-				{
+				} else {
 					writer.d.putByte(HANDLE).putByte(tag).putShort(writer.newMethod(item.g, item.h, item.i, tag == Opcodes.H_INVOKEINTERFACE));
 				}
 			}
@@ -149,7 +131,6 @@ public class RetroTweakClassWriter extends ClassWriter
 
 		ClassReader reader = new ClassReader(bytes);
 		reader.accept(writer, 0);
-
 		return writer.toByteArray();
 	}
 }

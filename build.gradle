@@ -113,7 +113,7 @@ processResources {
 	inputs.property "version", project.version // Redo this task when version value changes.
 	filesMatching('com/zero/retrowrapper/retrowrapperVersion.txt') {
 		// replace build variables
-		expand 'version':version
+		expand 'version': version
 	}
 }
 
@@ -147,7 +147,6 @@ publishing {
 		mavenJava(MavenPublication) {
 			// Shadowed .jar
 			publication -> project.shadow.component(publication)
-
 			// Source code in a .jar
 			artifact(sourcesJar) {
 				builtBy sourcesJar

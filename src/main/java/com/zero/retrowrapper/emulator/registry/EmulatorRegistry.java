@@ -11,29 +11,24 @@ import com.zero.retrowrapper.emulator.registry.handlers.ResourcesHandlerBeta;
 import com.zero.retrowrapper.emulator.registry.handlers.SaveHandler;
 import com.zero.retrowrapper.emulator.registry.handlers.SkinHandler;
 
-public class EmulatorRegistry
-{
+public class EmulatorRegistry {
 	public List<IHandler> handlers = new ArrayList<IHandler>();
 
-	private void register(EmulatorHandler handler)
-	{
+	private void register(EmulatorHandler handler) {
 		handlers.add(handler);
 	}
 
-	public IHandler getHandlerByUrl(String url)
-	{
-		for(IHandler handler : handlers)
-		{
-			if(url.contains(handler.getUrl()))
-			{
+	public IHandler getHandlerByUrl(String url) {
+		for (IHandler handler : handlers) {
+			if (url.contains(handler.getUrl())) {
 				return handler;
 			}
 		}
+
 		return null;
 	}
 
-	public void registerAll()
-	{
+	public void registerAll() {
 		register(new GameHandler());
 		register(new SaveHandler());
 		register(new LoadHandler());

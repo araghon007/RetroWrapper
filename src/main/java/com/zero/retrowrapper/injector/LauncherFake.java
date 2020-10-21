@@ -9,14 +9,12 @@ import java.util.Map;
 
 import com.zero.retrowrapper.emulator.EmulatorConfig;
 
-public class LauncherFake extends Applet implements AppletStub
-{
+public class LauncherFake extends Applet implements AppletStub {
 	private static final long serialVersionUID = 1L;
 
 	private Map<String, String> params = new HashMap<String, String>();
 
-	public LauncherFake(Map<String, String> params, Applet applet)
-	{
+	public LauncherFake(Map<String, String> params, Applet applet) {
 		this.params = params;
 	}
 
@@ -24,53 +22,44 @@ public class LauncherFake extends Applet implements AppletStub
 	public void appletResize(int width, int height) {}
 
 	@Override
-	public void setSize(int width, int height)
-	{
-	   super.setSize(width,height);
-	   validate();
+	public void setSize(int width, int height) {
+		super.setSize(width, height);
+		validate();
 	}
 
 	@Override
-	public boolean isActive()
-	{
+	public boolean isActive() {
 		return true;
 	}
 
 	@Override
-	public URL getDocumentBase()
-	{
-		try
-		{
-			return new URL("http://127.0.0.1:"+EmulatorConfig.getInstance().getPort()+"/game/");
-		}
-		catch (MalformedURLException e)
-		{
+	public URL getDocumentBase() {
+		try {
+			return new URL("http://127.0.0.1:" + EmulatorConfig.getInstance().getPort() + "/game/");
+		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
+
 		return null;
 	}
 
 	@Override
-	public URL getCodeBase()
-	{
-		try
-		{
-			return new URL("http://127.0.0.1:"+EmulatorConfig.getInstance().getPort()+"/game/");
-		}
-		catch (MalformedURLException e)
-		{
+	public URL getCodeBase() {
+		try {
+			return new URL("http://127.0.0.1:" + EmulatorConfig.getInstance().getPort() + "/game/");
+		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
+
 		return null;
 	}
 
 	@Override
-	public String getParameter(String paramName)
-	{
-		if (params.containsKey(paramName))
-		{
+	public String getParameter(String paramName) {
+		if (params.containsKey(paramName)) {
 			return params.get(paramName);
 		}
+
 		System.err.println("Client asked for parameter: " + paramName);
 		return null;
 	}
