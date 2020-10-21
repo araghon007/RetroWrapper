@@ -10,23 +10,23 @@ import com.zero.retrowrapper.emulator.registry.EmulatorHandler;
 import com.zero.retrowrapper.emulator.registry.IHandler;
 
 public class ListmapsHandler extends EmulatorHandler implements IHandler {
-	public ListmapsHandler() {
-		super("/listmaps.jsp");
-	}
+    public ListmapsHandler() {
+        super("/listmaps.jsp");
+    }
 
-	@Override
-	public void handle(OutputStream os, String get, byte[] data) throws IOException {
-		for (int i = 0; i < 5; i++) {
-			File file = new File(RetroEmulator.getInstance().getMapsDirectory(), "map" + i + ".txt");
-			String name = "-;";
+    @Override
+    public void handle(OutputStream os, String get, byte[] data) throws IOException {
+        for (int i = 0; i < 5; i++) {
+            File file = new File(RetroEmulator.getInstance().getMapsDirectory(), "map" + i + ".txt");
+            String name = "-;";
 
-			if (file.exists()) {
-				Scanner tempScan = new Scanner(file);
-				name = tempScan.nextLine() + ";";
-				tempScan.close();
-			}
+            if (file.exists()) {
+                Scanner tempScan = new Scanner(file);
+                name = tempScan.nextLine() + ";";
+                tempScan.close();
+            }
 
-			os.write(name.getBytes());
-		}
-	}
+            os.write(name.getBytes());
+        }
+    }
 }

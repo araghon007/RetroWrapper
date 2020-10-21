@@ -12,30 +12,30 @@ import com.zero.retrowrapper.emulator.registry.handlers.SaveHandler;
 import com.zero.retrowrapper.emulator.registry.handlers.SkinHandler;
 
 public class EmulatorRegistry {
-	public List<IHandler> handlers = new ArrayList<IHandler>();
+    public List<IHandler> handlers = new ArrayList<IHandler>();
 
-	private void register(EmulatorHandler handler) {
-		handlers.add(handler);
-	}
+    private void register(EmulatorHandler handler) {
+        handlers.add(handler);
+    }
 
-	public IHandler getHandlerByUrl(String url) {
-		for (IHandler handler : handlers) {
-			if (url.contains(handler.getUrl())) {
-				return handler;
-			}
-		}
+    public IHandler getHandlerByUrl(String url) {
+        for (IHandler handler : handlers) {
+            if (url.contains(handler.getUrl())) {
+                return handler;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public void registerAll() {
-		register(new GameHandler());
-		register(new SaveHandler());
-		register(new LoadHandler());
-		register(new ListmapsHandler());
-		register(new ResourcesHandler());
-		register(new ResourcesHandlerBeta());
-		register(new SkinHandler("/skin/"));
-		register(new SkinHandler("/MinecraftSkins/"));
-	}
+    public void registerAll() {
+        register(new GameHandler());
+        register(new SaveHandler());
+        register(new LoadHandler());
+        register(new ListmapsHandler());
+        register(new ResourcesHandler());
+        register(new ResourcesHandlerBeta());
+        register(new SkinHandler("/skin/"));
+        register(new SkinHandler("/MinecraftSkins/"));
+    }
 }
