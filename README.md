@@ -4,7 +4,7 @@ This fork of RetroWrapper aims to fix bugs and implement some quality of life ch
 
 Head to the [releases page](https://github.com/NeRdTheNed/RetroWrapper/releases) to grab the newest version! If you find any issues I don't know about or I've accidentally introduced, please report them on the [issues page](https://github.com/NeRdTheNed/RetroWrapper/issues)!
 
-Note: Binary distributions of this software bundle classes from the Apache Commons Codec library, which is licensed under the Apache License Version 2.0. A full copy of this license can be found in COMMONS-CODEC-LICENSE.txt, which should be in the top-level directory of this repository. Binary distributions also include this information under META-INF.
+Note: Binary distributions of this software bundle classes from the Apache Commons project, which are licensed under the Apache License Version 2.0. A full copy of this license can be found in COMMONS-LICENSE.txt, which should be in the top-level directory of this repository. Binary distributions also include this information under META-INF.
 
 # Original Readme
 Enables you to play _fixed_ old versions of minecraft without ever touching .jar files, works even when offline!
@@ -64,11 +64,11 @@ Copy that folder you want to patch and add -retro to its name (eg. c0.30_01 to c
 Go inside that folder and add -retro to all filenames inside it
 
 Edit <version>.json and
-  
+
 - add -retro to id (eg. replace **"id": "c0.30_01c",* with *"id": "c0.30_01c-retro",**)
 - replace **"libraries":** with **"libraries": [{"name": "com.zero:retrowrapper:1.2"},**
 - replace **--tweakClass net.minecraft.launchwrapper....VanillaTweaker** with **--tweakClass com.zero.retrowrapper.RetroTweaker**
-  
+
 Launch Minecraft and choose newly created version!
 
 

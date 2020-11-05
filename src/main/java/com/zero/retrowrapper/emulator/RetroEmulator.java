@@ -8,74 +8,60 @@ import com.zero.retrowrapper.emulator.registry.EmulatorRegistry;
 
 import net.minecraft.launchwrapper.Launch;
 
-public class RetroEmulator extends Thread implements Runnable
-{
-	private static RetroEmulator instance;
+public class RetroEmulator extends Thread implements Runnable {
+    private static RetroEmulator instance;
 
-	private EmulatorRegistry registry;
-	private File directory;
-	private File mapsDirectory;
-	private File cacheDirectory;
+    private EmulatorRegistry registry;
+    private File directory;
+    private File mapsDirectory;
+    private File cacheDirectory;
 
-	@Override
-	public void run()
-	{
-		instance = this;
+    @Override
+    public void run() {
+        instance = this;
+        System.out.println("Old servers emulator is running!");
+        registry = new EmulatorRegistry();
+        registry.registerAll();
+        directory = new File(Launch.minecraftHome, "retrowrapper");
+        directory.mkdirs();
+        mapsDirectory = new File(RetroEmulator.getInstance().getDirectory(), "maps");
+        mapsDirectory.mkdir();
+        cacheDirectory = new File(RetroEmulator.getInstance().getDirectory(), "cache");
+        cacheDirectory.mkdir();
 
-		System.out.println("Old servers emulator is running!");
+        try
+            (ServerSocket server = new ServerSocket(EmulatorConfig.getInstance().getPort())) {
+            while (true) {
+                Socket socket = server.accept();
 
-		registry = new EmulatorRegistry();
-		registry.registerAll();
+                try {
+                    new SocketEmulator(socket).parseIncoming();;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-		directory = new File(Launch.minecraftHome, "retrowrapper");
-		directory.mkdirs();
-		mapsDirectory = new File(RetroEmulator.getInstance().getDirectory(), "maps");
-		mapsDirectory.mkdir();
-		cacheDirectory = new File(RetroEmulator.getInstance().getDirectory(), "cache");
-		cacheDirectory.mkdir();
+    public EmulatorRegistry getRegistry() {
+        return registry;
+    }
 
-		try(ServerSocket server = new ServerSocket(EmulatorConfig.getInstance().getPort()))
-		{
-			while(true)
-			{
-				Socket socket = server.accept();
-				try
-				{
-					new SocketEmulator(socket).parseIncoming();;
-				}catch(Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
+    public File getDirectory() {
+        return directory;
+    }
 
-	public EmulatorRegistry getRegistry()
-	{
-		return registry;
-	}
+    public File getMapsDirectory() {
+        return mapsDirectory;
+    }
 
-	public File getDirectory()
-	{
-		return directory;
-	}
+    public File getCacheDirectory() {
+        return cacheDirectory;
+    }
 
-	public File getMapsDirectory()
-	{
-		return mapsDirectory;
-	}
-
-	public File getCacheDirectory()
-	{
-		return cacheDirectory;
-	}
-
-	public static RetroEmulator getInstance()
-	{
-		return instance;
-	}
+    public static RetroEmulator getInstance() {
+        return instance;
+    }
 }

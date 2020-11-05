@@ -1,15 +1,14 @@
 plugins {
-	id 'java-library'
-	id 'maven-publish'
-	id 'com.github.johnrengelman.shadow' version '6.1.0'
-	//id 'checkstyle' // TODO: This is a reminder for me to setup checkstyle.
+    id 'java-library'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    //id 'checkstyle' // TODO: This is a reminder for me to setup checkstyle.
 }
 
 // Reproducible builds! https://docs.gradle.org/4.9/userguide/working_with_files.html#sec:reproducible_archives
-// Note: snapshots are not reproducible due to replacing constants in the source code. Might rethink that.
 tasks.withType(AbstractArchiveTask) {
-	preserveFileTimestamps = false
-	reproducibleFileOrder = true
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
 }
 
 apply plugin: 'java'
@@ -18,134 +17,140 @@ apply plugin: 'java'
 /* apply plugin: 'checkstyle'
 
 configurations {
-  checkstyleConfig
+    checkstyleConfig
 }
 
 def versions = [
-  checkstyle: '6.2',
+    checkstyle: '6.2',
 ]
 
 dependencies {
-  checkstyleConfig ("com.puppycrawl.tools:checkstyle:${versions.checkstyle}") {
-		transitive = false
-	}
+    checkstyleConfig ("com.puppycrawl.tools:checkstyle:${versions.checkstyle}") {
+        transitive = false
+    }
 }
 
 checkstyle {
-  toolVersion = "${versions.checkstyle}"
-  config = resources.text.fromArchiveEntry(configurations.checkstyleConfig, 'google_checks.xml')
+    toolVersion = "${versions.checkstyle}"
+    config = resources.text.fromArchiveEntry(configurations.checkstyleConfig, 'google_checks.xml')
 } */
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(7)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(7)
+    }
 }
 
 repositories {
-	mavenCentral()
-	jcenter()
-	maven {
-		name = 'mojang'
-		url = 'https://libraries.minecraft.net/'
-	}
+    mavenCentral()
+    jcenter()
+    maven {
+        name = 'mojang'
+        url = 'https://libraries.minecraft.net/'
+    }
 }
 
 shadowJar {
-	dependencies {
-		exclude(dependency("org.ow2.asm:asm-all:${project.asmVersion}"))
-		exclude(dependency("net.minecraft:launchwrapper:${project.launchwrapperVersion}"))
-		exclude(dependency("net.sf.jopt-simple:jopt-simple:${project.joptSimpleVersion}"))
-	}
+    dependencies {
+        exclude(dependency("org.ow2.asm:asm-all:${project.asmVersion}"))
+        exclude(dependency("net.minecraft:launchwrapper:${project.launchwrapperVersion}"))
+        exclude(dependency("net.sf.jopt-simple:jopt-simple:${project.joptSimpleVersion}"))
+    }
 
-	minimize()
+    minimize()
 
-	from "README.md"
+    // Hacky exclusions to minimise file size.
+    exclude 'org/**/*.txt'
+    exclude 'META-INF/maven/**/*.*'
 
-	// Hacky exclusions to minimise file size.
-	exclude 'org/**/*.txt'
-	
-	// Relocate libraries to prevent them from leaking into the classpath for other applications
-	relocate 'org.apache.commons.codec', 'com.zero.retrowrapper.shadow.commons-codec'
-	relocate 'com.eclipsesource.json', 'com.zero.retrowrapper.shadow.minimal-json'
+    // Currently, this merges all licences from each library into one file, as well as the same for notices.
+    // TODO: Come up with a better way to do this. Ideally I'd rename the file based on the library.
+    append 'META-INF/LICENSE.txt'
+    append 'META-INF/NOTICE.txt'
 
+    // Relocate libraries to prevent them from leaking into the classpath for other applications
+    relocate 'org.apache.commons.codec', 'com.zero.retrowrapper.shadow.commons-codec'
+    relocate 'org.apache.commons.io', 'com.zero.retrowrapper.shadow.commons-io'
+    relocate 'com.eclipsesource.json', 'com.zero.retrowrapper.shadow.minimal-json'
 }
 
 version = project.version
-def versionText
 
 task checkRelease {
-	if (!(System.getenv("BUILD_RELEASE") == "true")) {
-		version += ("-SNAPSHOT+" + getTimestampSuffix())
-		versionText = project.devVersionText
-	} else {
-		versionText = project.versionText
-	}
+    if (!(System.getenv("BUILD_RELEASE") == "true")) {
+        version += ("-SNAPSHOT+" + getTimestampSuffix())
+    }
 }
 
 def getTimestampSuffix() {
-	   def date = new Date()
-	   return date.format('yyyy-MM-dd_HHmmss')
+    def date = new Date()
+    return date.format('yyyy-MM-dd_HHmmss')
 }
 
 dependencies {
-	// asm
-	api "org.ow2.asm:asm-all:${project.asmVersion}"
+    // asm
+    api "org.ow2.asm:asm-all:${project.asmVersion}"
 
-	// launchwrapper + dependencies
-	api ("net.minecraft:launchwrapper:${project.launchwrapperVersion}") {
-		transitive = false
-	}
+    // launchwrapper + dependencies
+    api ("net.minecraft:launchwrapper:${project.launchwrapperVersion}") {
+        transitive = false
+    }
 
-	// jopt
-	api "net.sf.jopt-simple:jopt-simple:${project.joptSimpleVersion}"
+    // jopt
+    api "net.sf.jopt-simple:jopt-simple:${project.joptSimpleVersion}"
 
-	// commons-codec, for Base 64 decoding of skin strings
-	implementation "commons-codec:commons-codec:${project.commonsCodecVersion}"
+    // commons-codec, for Base 64 decoding of skin strings
+    implementation "commons-codec:commons-codec:${project.commonsCodecVersion}"
 
-	// minimal-json
-	implementation "com.eclipsesource.minimal-json:minimal-json:${project.minimalJsonVersion}"
+    // commons-io, for file access
+    implementation "commons-io:commons-io:${project.commonsIOVersion}"
+
+    // minimal-json
+    implementation "com.eclipsesource.minimal-json:minimal-json:${project.minimalJsonVersion}"
 }
 
-/** This is a quick and dirty hack to automatically add some build constants to the source code when compiling. This task should probably be replaced at some point. */
-task processSource (type: Sync, dependsOn: 'checkRelease') {
-	duplicatesStrategy = DuplicatesStrategy.FAIL
-	outputs.upToDateWhen { false }
-
-	from(sourceSets.main.java) {
-		// only process this file
-		filesMatching('com/zero/retrowrapper/util/Constants.java') {
-			// replace build variables
-			expand 'version':version, 'versionText':versionText
-		}
-	}
-
-	into "$buildDir/processedSource"
+processResources {
+    inputs.property "version", project.version // Redo this task when version value changes.
+    filesMatching('com/zero/retrowrapper/retrowrapperVersion.txt') {
+        // replace build variables
+        expand 'version': version
+    }
 }
 
+// Ensures that the encoding of source files is set to UTF-8, see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
-compileJava {
-	//use the processed source with replaced build variables
-	source = processSource.outputs
+jar {
+    manifest {
+        attributes (
+            'Main-Class': 'com.zero.retrowrapper.installer.Installer'
+        )
+    }
+    enabled = false
+    dependsOn(shadowJar { classifier = null })
 }
 
-jar {
-	manifest {
-		attributes (
-			'Main-Class': 'com.zero.retrowrapper.installer.Installer'
-		)
-	}
-	enabled = false
-	dependsOn(shadowJar { classifier = null })
+// This task creates a .jar file containing the source code of this project.
+task sourcesJar(type: Jar) {
+    classifier = "sources"
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
 }
 
 publishing {
-	publications {
-		mavenJavaShadow(MavenPublication) { publication ->
-		  project.shadow.component(publication)
-		}
-	}
+    publications {
+        mavenJava(MavenPublication) {
+            // Shadowed .jar
+            publication -> project.shadow.component(publication)
+            // Source code in a .jar
+            artifact(sourcesJar) {
+                builtBy sourcesJar
+            }
+        }
+    }
 }
