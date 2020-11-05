@@ -123,7 +123,7 @@ public class Installer {
             uninstall.setEnabled(true);
             JOptionPane.showMessageDialog(null, "No wrappable versions found!", "Error", JOptionPane.INFORMATION_MESSAGE);
         } else if (versionCount == 0) {
-            install.setEnabled(false);
+            install.setEnabled(true);
             uninstall.setEnabled(true);
             JOptionPane.showMessageDialog(null, "All detected versions have already been wrapped!", "Info", JOptionPane.INFORMATION_MESSAGE);
         } else {
@@ -180,24 +180,6 @@ public class Installer {
                 refreshList(workingDirectory);
                 //System.exit(0);
             }
-            private void deleteDirectory(File f) {
-                try {
-                    Files.walkFileTree(f.toPath(), new SimpleFileVisitor<Path>() {
-                        @Override
-                        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                            Files.delete(file);
-                            return FileVisitResult.CONTINUE;
-                        }
-                        @Override
-                        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                            Files.delete(dir);
-                            return FileVisitResult.CONTINUE;
-                        }
-                    });
-                } catch (IOException ee) {
-                    ee.printStackTrace();
-                }
-            }
         });
         frame.add(uninstall);
         install = new JButton("Install"); //installation code
@@ -208,8 +190,12 @@ public class Installer {
                 List<String> versionList = list.getSelectedValuesList();
                 String finalVersions = "";
                 for(String version : versionList){
+                    if(version.contains("- already wrapped")){
+                        version = version.replace(" - already wrapped", "");
+                        deleteDirectory(new File(directory, "versions/" + version + "-wrapped"));
+                    }
                     try
-                        (Reader s = new FileReader(new File(versions, version + File.separator + version + ".json"))) {
+                    (Reader s = new FileReader(new File(versions, version + File.separator + version + ".json"))) {
                         finalVersions += version + "\n";
                         JsonObject versionJson = Json.parse(s).asObject();
                         String versionWrapped = version + "-wrapped";
@@ -242,7 +228,7 @@ public class Installer {
                         libDir.mkdirs();
 
                         try
-                            (FileOutputStream fos = new FileOutputStream(new File(wrapDir, versionWrapped + ".json"))) {
+                        (FileOutputStream fos = new FileOutputStream(new File(wrapDir, versionWrapped + ".json"))) {
                             Files.copy(new File(versions, version + File.separator + version + ".jar").toPath(), new File(wrapDir, versionWrapped + ".jar").toPath(), StandardCopyOption.REPLACE_EXISTING);
                             fos.write(versionJson.toString().getBytes());
                             fos.close();
@@ -274,6 +260,25 @@ public class Installer {
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Exception occured!\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private static void deleteDirectory(File f) {
+        try {
+            Files.walkFileTree(f.toPath(), new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
+                }
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException ee) {
+            ee.printStackTrace();
         }
     }
 }
