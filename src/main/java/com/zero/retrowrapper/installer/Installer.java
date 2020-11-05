@@ -206,9 +206,11 @@ public class Installer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 List<String> versionList = list.getSelectedValuesList();
+                String finalVersions = "";
                 for(String version : versionList){
                     try
                         (Reader s = new FileReader(new File(versions, version + File.separator + version + ".json"))) {
+                        finalVersions += version + "\n";
                         JsonObject versionJson = Json.parse(s).asObject();
                         String versionWrapped = version + "-wrapped";
                         // Add the RetroWrapper library to the list of libraries. A library is a JSON object, and libraries are stored in an array of JSON objects.
@@ -253,10 +255,10 @@ public class Installer {
                         ee.printStackTrace();
                         // TODO Better error handling
                     }
-                    JOptionPane.showMessageDialog(null, "Successfully wrapped version\n" + version, "Success", JOptionPane.INFORMATION_MESSAGE);
-                    refreshList(workingDirectory);
-                    //System.exit(0);
                 }
+                JOptionPane.showMessageDialog(null, "Successfully wrapped version\n" + finalVersions, "Success", JOptionPane.INFORMATION_MESSAGE);
+                refreshList(workingDirectory);
+                //System.exit(0);
             }
         });
         frame.add(install);
