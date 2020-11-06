@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -161,25 +162,30 @@ public class Installer {
         label2.setHorizontalAlignment(SwingConstants.CENTER);
         label2.setBounds(0, 360, 654, 20);
         frame.add(label2);
-        JTextField test = new JTextField(workingDirectory);
-        test.setHorizontalAlignment(SwingConstants.CENTER);
-        test.setBounds(654 / 2 - 150, 65, 300, 20);
-        test.addActionListener(new ActionListener() {
+        JTextField workDir = new JTextField(workingDirectory);
+        workDir.setHorizontalAlignment(SwingConstants.CENTER);
+        workDir.setBounds(654 / 2 - 150, 65, 300, 20);
+        workDir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String test = ((JTextField)e.getSource()).getText();
-                File testDir = new File(test);
+                String workDirPath = ((JTextField)e.getSource()).getText();
+                File minecraftDir = new File(workDirPath);
 
-                if (refreshList(test)) {
-                    workingDirectory = test;
+                if (minecraftDir.exists() && refreshList(workDirPath)) {
+                    workingDirectory = workDirPath;
+                }
+                else if (minecraftDir.exists()){
+                    ((JTextField)e.getSource()).setText(workingDirectory);
+                    refreshList(workingDirectory);
                 }
                 else {
+                    JOptionPane.showMessageDialog(null, "No directory / minecraft directory detected!\n", "Error", JOptionPane.INFORMATION_MESSAGE);
                     ((JTextField)e.getSource()).setText(workingDirectory);
                     refreshList(workingDirectory);
                 }
             }
         });
-        frame.add(test);
+        frame.add(workDir);
         JScrollPane scrollList = new JScrollPane(list);
         scrollList.setBounds(654 / 2 - 150, 100, 300, 140);
         frame.add(scrollList);
@@ -263,9 +269,9 @@ public class Installer {
                             Files.copy(new File(versions, version + File.separator + version + ".jar").toPath(), new File(wrapDir, versionWrapped + ".jar").toPath(), StandardCopyOption.REPLACE_EXISTING);
                             fos.write(versionJson.toString().getBytes());
                             fos.close();
-                            File jar = new File(URLDecoder.decode(Installer.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8"));
+                            File jar = new File(URLDecoder.decode(Installer.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath(), "UTF-8"));
                             Files.copy(jar.toPath(), new File(libDir, "retrowrapper-installer.jar").toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        } catch (IOException ee) {
+                        } catch (IOException | URISyntaxException ee) {
                             ee.printStackTrace();
                         }
                     } catch (IOException ee) {
