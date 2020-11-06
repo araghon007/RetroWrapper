@@ -58,7 +58,7 @@ public class Installer {
         }
     }
 
-    void refreshList(String givenDirectory) {
+    boolean refreshList(String givenDirectory) {
         versionCount = 0;
         wrappedVersionCount = 0;
         model.removeAllElements();
@@ -114,21 +114,26 @@ public class Installer {
             install.setEnabled(false);
             uninstall.setEnabled(false);
             JOptionPane.showMessageDialog(null, "No directory / minecraft directory detected!\n", "Error", JOptionPane.INFORMATION_MESSAGE);
+            return false;
         } else if (!versions.exists()) {
             install.setEnabled(false);
             uninstall.setEnabled(false);
             JOptionPane.showMessageDialog(null, "No Minecraft versions folder found!", "Error", JOptionPane.INFORMATION_MESSAGE);
+            return false;
         } else if (versionCount == 0 && wrappedVersionCount == 0) {
             install.setEnabled(false);
             uninstall.setEnabled(true);
             JOptionPane.showMessageDialog(null, "No wrappable versions found!", "Error", JOptionPane.INFORMATION_MESSAGE);
+            return false;
         } else if (versionCount == 0) {
             install.setEnabled(true);
             uninstall.setEnabled(true);
             JOptionPane.showMessageDialog(null, "All detected versions have already been wrapped!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            return true;
         } else {
             install.setEnabled(true);
             uninstall.setEnabled(true);
+            return true;
         }
     }
 
@@ -156,6 +161,25 @@ public class Installer {
         label2.setHorizontalAlignment(SwingConstants.CENTER);
         label2.setBounds(0, 360, 654, 20);
         frame.add(label2);
+        JTextField test = new JTextField(workingDirectory);
+        test.setHorizontalAlignment(SwingConstants.CENTER);
+        test.setBounds(654 / 2 - 150, 65, 300, 20);
+        test.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String test = ((JTextField)e.getSource()).getText();
+                File testDir = new File(test);
+
+                if (refreshList(test)) {
+                    workingDirectory = test;
+                }
+                else {
+                    ((JTextField)e.getSource()).setText(workingDirectory);
+                    refreshList(workingDirectory);
+                }
+            }
+        });
+        frame.add(test);
         JScrollPane scrollList = new JScrollPane(list);
         scrollList.setBounds(654 / 2 - 150, 100, 300, 140);
         frame.add(scrollList);
@@ -195,11 +219,11 @@ public class Installer {
                 if (libsDir.exists()) {
                     deleteDirectory(libsDir); // Makes sure that the library gets reinstalled
                 }
-                
+
                 for(String version : versionList){
                     if(version.contains("- already wrapped")){
                         version = version.replace(" - already wrapped", "");
-                        deleteDirectory(new File(directory, "versions/" + version + "-wrapped"));
+                        deleteDirectory(new File(directory, "versions" + File.separator + version + "-wrapped"));
                     }
                     try
                     (Reader s = new FileReader(new File(versions, version + File.separator + version + ".json"))) {
