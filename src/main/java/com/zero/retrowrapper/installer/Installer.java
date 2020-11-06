@@ -190,10 +190,10 @@ public class Installer {
                 List<String> versionList = list.getSelectedValuesList();
                 String finalVersions = "";
 
-                File libDir = new File(directory, "libraries" + File.separator + "com" + File.separator + "zero");
+                File libsDir = new File(directory, "libraries" + File.separator + "com" + File.separator + "zero");
 
-                if (libDir.exists()) {
-                    deleteDirectory(libDir); // Makes sure that the library gets reinstalled
+                if (libsDir.exists()) {
+                    deleteDirectory(libsDir); // Makes sure that the library gets reinstalled
                 }
                 
                 for(String version : versionList){
