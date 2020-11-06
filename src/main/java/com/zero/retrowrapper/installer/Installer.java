@@ -189,6 +189,13 @@ public class Installer {
             public void actionPerformed(ActionEvent e) {
                 List<String> versionList = list.getSelectedValuesList();
                 String finalVersions = "";
+
+                File libDir = new File(directory, "libraries" + File.separator + "com" + File.separator + "zero");
+
+                if (libDir.exists()) {
+                    deleteDirectory(libDir); // Makes sure that the library gets reinstalled
+                }
+                
                 for(String version : versionList){
                     if(version.contains("- already wrapped")){
                         version = version.replace(" - already wrapped", "");
