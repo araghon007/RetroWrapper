@@ -269,7 +269,7 @@ public class Installer {
                             Files.copy(new File(versions, version + File.separator + version + ".jar").toPath(), new File(wrapDir, versionWrapped + ".jar").toPath(), StandardCopyOption.REPLACE_EXISTING);
                             fos.write(versionJson.toString().getBytes());
                             fos.close();
-                            File jar = new File(URLDecoder.decode(Installer.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath(), "UTF-8"));
+                            File jar = new File(Installer.class.getProtectionDomain().getCodeSource().getLocation().toURI());
                             Files.copy(jar.toPath(), new File(libDir, "retrowrapper-installer.jar").toPath(), StandardCopyOption.REPLACE_EXISTING);
                         } catch (IOException | URISyntaxException ee) {
                             ee.printStackTrace();
